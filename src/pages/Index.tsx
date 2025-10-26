@@ -20,6 +20,10 @@ const HandwritingWorksheetGenerator = () => {
   const [guidelineStyle, setGuidelineStyle] = useState('elementary');
   const [guidelineThickness, setGuidelineThickness] = useState(1);
   const [emptyPaper, setEmptyPaper] = useState(false);
+  const [repeatText, setRepeatText] = useState(false);
+  const [fullMarginGuides, setFullMarginGuides] = useState(false);
+  const [textOpacity, setTextOpacity] = useState(0.3);
+  const [guidelineOpacity, setGuidelineOpacity] = useState(1);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -158,13 +162,13 @@ const HandwritingWorksheetGenerator = () => {
       }
       
       if (i === 0 || (i === lines - 1 && lines > 1)) {
-        ctx.strokeStyle = '#999999';
+        ctx.strokeStyle = `rgba(153, 153, 153, ${guidelineOpacity})`;
         ctx.setLineDash([]);
       } else if (dottedMiddle && (i === 1 && lines === 3) || (i === 1 && lines === 4)) {
-        ctx.strokeStyle = '#cccccc';
+        ctx.strokeStyle = `rgba(204, 204, 204, ${guidelineOpacity})`;
         ctx.setLineDash([3, 3]);
       } else {
-        ctx.strokeStyle = '#cccccc';
+        ctx.strokeStyle = `rgba(204, 204, 204, ${guidelineOpacity})`;
         ctx.setLineDash([]);
       }
       
@@ -180,8 +184,8 @@ const HandwritingWorksheetGenerator = () => {
   // FIXED: Simplified function lets canvas handle kerning/spacing
   const drawDottedText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number) => {
     ctx.save();
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.8})`;
+    ctx.fillStyle = `rgba(0, 0, 0, ${textOpacity * 0.3})`;
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 3]);
     
@@ -212,7 +216,7 @@ const HandwritingWorksheetGenerator = () => {
         if (dottedFont) {
           drawDottedText(ctx, text, x, currentBaselineY);
         } else {
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+          ctx.fillStyle = `rgba(0, 0, 0, ${textOpacity})`;
           ctx.fillText(text, x, currentBaselineY);
         }
       }
@@ -225,12 +229,12 @@ const HandwritingWorksheetGenerator = () => {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    const margin = 50;
+    const margin = fullMarginGuides ? 0 : 50;
     const contentWidth = width - (margin * 2);
     const contentHeight = height - margin; // Usable height
     
     // This y-position tracks (topLineY + 0.35 * fontSize)
-    let yPosition = margin + fontSize; 
+    let yPosition = margin + fontSize;
 
     if (emptyPaper) {
       const lineSetHeight = fontSize * 2; // Height of one full line set
@@ -249,35 +253,35 @@ const HandwritingWorksheetGenerator = () => {
       
       const words = text.split(' ');
       let currentLine = '';
+      let wordIndex = 0;
 
-      for (let i = 0; i < words.length; i++) {
-        const word = words[i];
+      while (yPosition < contentHeight) {
+        const word = words[wordIndex % words.length];
         const testLine = currentLine + (currentLine ? ' ' : '') + word;
         const metrics = ctx.measureText(testLine);
         
-        if ((metrics.width > contentWidth && currentLine) || i === words.length - 1) {
-          let lineToDraw = (metrics.width > contentWidth && currentLine) ? currentLine : testLine;
+        if (metrics.width > contentWidth && currentLine) {
+          // Draw current line and start new one
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
+          yPosition += lineSetHeight;
+          currentLine = '';
           
-          if (i === words.length - 1 && !(metrics.width > contentWidth && currentLine)) {
-            // This is the last word, draw the whole testLine
-            lineToDraw = testLine;
-          } else if (metrics.width > contentWidth && currentLine) {
-            // The new word makes it too long, draw the previous line
-            lineToDraw = currentLine;
-            // Push the current word to be the start of the next line
-            i--; 
-          }
-
-          if (yPosition < contentHeight) {
-            drawTracingLine(ctx, lineToDraw, margin, yPosition, lineHeight);
-            yPosition += lineSetHeight;
-            currentLine = '';
-          } else {
-            // Stop drawing if we run off the page
-            break; 
+          if (!repeatText) {
+            // Move to next word without repeating
+            wordIndex++;
+            if (wordIndex >= words.length) break;
           }
         } else {
           currentLine = testLine;
+          wordIndex++;
+          
+          // If we've used all words and not repeating, draw final line and stop
+          if (!repeatText && wordIndex >= words.length) {
+            if (currentLine && yPosition < contentHeight) {
+              drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
+            }
+            break;
+          }
         }
       }
     }
@@ -356,7 +360,8 @@ const HandwritingWorksheetGenerator = () => {
   }, [
     text, fontSize, lineCount, selectedFont, showGuides, 
     dottedFont, guidelineStyle, guidelineThickness, 
-    emptyPaper, paperSize, fontsLoaded
+    emptyPaper, paperSize, fontsLoaded, repeatText,
+    fullMarginGuides, textOpacity, guidelineOpacity
   ]);
 
 
@@ -471,6 +476,19 @@ const HandwritingWorksheetGenerator = () => {
                       Dotted Font (for tracing)
                     </label>
                   </div>
+
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      id="repeat"
+                      checked={repeatText}
+                      onChange={(e) => setRepeatText(e.target.checked)}
+                      className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+                    />
+                    <label htmlFor="repeat" className="text-sm font-semibold text-gray-700">
+                      Repeat Text for Full Page
+                    </label>
+                  </div>
                 </>
               )}
             </div>
@@ -580,6 +598,49 @@ const HandwritingWorksheetGenerator = () => {
                 <label htmlFor="guides" className="text-sm font-semibold text-gray-700">
                   Show Guidelines
                 </label>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="fullMargin"
+                  checked={fullMarginGuides}
+                  onChange={(e) => setFullMarginGuides(e.target.checked)}
+                  className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+                />
+                <label htmlFor="fullMargin" className="text-sm font-semibold text-gray-700">
+                  Full Margin Guidelines
+                </label>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Text Opacity: {Math.round(textOpacity * 100)}%
+                </label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.1"
+                  value={textOpacity}
+                  onChange={(e) => setTextOpacity(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Guideline Opacity: {Math.round(guidelineOpacity * 100)}%
+                </label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.1"
+                  value={guidelineOpacity}
+                  onChange={(e) => setGuidelineOpacity(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
               </div>
 
               <button
