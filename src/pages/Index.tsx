@@ -1,8 +1,11 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Download, Type, Search, FileText, Settings } from 'lucide-react';
+import { Download, Type, Search, FileText, Settings, Save, Upload, RotateCcw } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
 
 const HandwritingWorksheetGenerator = () => {
+  const { toast } = useToast();
+  
   // --- STATE ---
   const [text, setText] = useState('The quick brown fox jumps over the lazy dog');
   const [fontSize, setFontSize] = useState(48);
@@ -350,7 +353,124 @@ const HandwritingWorksheetGenerator = () => {
     ctx.restore();
   };
 
+  // --- LOCAL STORAGE ---
+  const STORAGE_KEY = 'handwriting-worksheet-preferences';
+
+  const savePreferences = () => {
+    const preferences = {
+      text,
+      fontSize,
+      lineCount,
+      selectedFont,
+      showGuides,
+      fontCategory,
+      paperSize,
+      pageCount,
+      dottedFont,
+      guidelineStyle,
+      guidelineThickness,
+      emptyPaper,
+      repeatText,
+      fullMarginGuides,
+      textOpacity,
+      guidelineOpacity
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
+    toast({
+      title: "Preferences Saved",
+      description: "Your settings have been saved successfully.",
+    });
+  };
+
+  const loadPreferences = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const preferences = JSON.parse(saved);
+        setText(preferences.text ?? 'The quick brown fox jumps over the lazy dog');
+        setFontSize(preferences.fontSize ?? 48);
+        setLineCount(preferences.lineCount ?? 3);
+        setSelectedFont(preferences.selectedFont ?? 'Edu QLD Beginner');
+        setShowGuides(preferences.showGuides ?? true);
+        setFontCategory(preferences.fontCategory ?? 'educational');
+        setPaperSize(preferences.paperSize ?? 'a4');
+        setPageCount(preferences.pageCount ?? 1);
+        setDottedFont(preferences.dottedFont ?? true);
+        setGuidelineStyle(preferences.guidelineStyle ?? 'elementary');
+        setGuidelineThickness(preferences.guidelineThickness ?? 1);
+        setEmptyPaper(preferences.emptyPaper ?? false);
+        setRepeatText(preferences.repeatText ?? false);
+        setFullMarginGuides(preferences.fullMarginGuides ?? false);
+        setTextOpacity(preferences.textOpacity ?? 0.3);
+        setGuidelineOpacity(preferences.guidelineOpacity ?? 1);
+        toast({
+          title: "Preferences Loaded",
+          description: "Your saved settings have been restored.",
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load preferences:', error);
+      toast({
+        title: "Load Failed",
+        description: "Could not load saved preferences.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const resetPreferences = () => {
+    setText('The quick brown fox jumps over the lazy dog');
+    setFontSize(48);
+    setLineCount(3);
+    setSelectedFont('Edu QLD Beginner');
+    setShowGuides(true);
+    setFontCategory('educational');
+    setPaperSize('a4');
+    setPageCount(1);
+    setDottedFont(true);
+    setGuidelineStyle('elementary');
+    setGuidelineThickness(1);
+    setEmptyPaper(false);
+    setRepeatText(false);
+    setFullMarginGuides(false);
+    setTextOpacity(0.3);
+    setGuidelineOpacity(1);
+    localStorage.removeItem(STORAGE_KEY);
+    toast({
+      title: "Preferences Reset",
+      description: "All settings have been reset to defaults.",
+    });
+  };
+
   // --- EFFECTS ---
+  // Load preferences on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const preferences = JSON.parse(saved);
+        setText(preferences.text ?? 'The quick brown fox jumps over the lazy dog');
+        setFontSize(preferences.fontSize ?? 48);
+        setLineCount(preferences.lineCount ?? 3);
+        setSelectedFont(preferences.selectedFont ?? 'Edu QLD Beginner');
+        setShowGuides(preferences.showGuides ?? true);
+        setFontCategory(preferences.fontCategory ?? 'educational');
+        setPaperSize(preferences.paperSize ?? 'a4');
+        setPageCount(preferences.pageCount ?? 1);
+        setDottedFont(preferences.dottedFont ?? true);
+        setGuidelineStyle(preferences.guidelineStyle ?? 'elementary');
+        setGuidelineThickness(preferences.guidelineThickness ?? 1);
+        setEmptyPaper(preferences.emptyPaper ?? false);
+        setRepeatText(preferences.repeatText ?? false);
+        setFullMarginGuides(preferences.fullMarginGuides ?? false);
+        setTextOpacity(preferences.textOpacity ?? 0.3);
+        setGuidelineOpacity(preferences.guidelineOpacity ?? 1);
+      } catch (error) {
+        console.error('Failed to load preferences on mount:', error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (text || emptyPaper) {
       loadFont(selectedFont);
@@ -370,9 +490,37 @@ const HandwritingWorksheetGenerator = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <Type className="w-8 h-8 text-indigo-600" />
-            <h1 className="text-3xl font-bold text-gray-800">Handwriting Worksheet Generator</h1>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <Type className="w-8 h-8 text-indigo-600" />
+              <h1 className="text-3xl font-bold text-gray-800">Handwriting Worksheet Generator</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={savePreferences}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium"
+                title="Save current settings"
+              >
+                <Save className="w-4 h-4" />
+                Save
+              </button>
+              <button
+                onClick={loadPreferences}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+                title="Load saved settings"
+              >
+                <Upload className="w-4 h-4" />
+                Load
+              </button>
+              <button
+                onClick={resetPreferences}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-sm font-medium"
+                title="Reset to defaults"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset
+              </button>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-6">
