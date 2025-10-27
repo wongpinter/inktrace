@@ -8,6 +8,52 @@ export const TOP_LINE_RATIO = 0.35;
 export const LINE_HEIGHT_MULTIPLIER = 1.8;
 export const LINE_SET_HEIGHT_MULTIPLIER = 1.5;
 
+// Line spacing presets based on educational standards
+// Baseline-to-baseline measurements in millimeters
+export const LINE_SPACING_PRESETS = {
+  kindergarten: {
+    spacingMm: 19,
+    label: 'Kindergarten (19mm)',
+    description: 'Zaner-Bloser standard for kindergarten',
+    gradeLevel: 'K'
+  },
+  'grade1-3': {
+    spacingMm: 12.7,
+    label: 'Grades 1-3 (12.7mm / ½")',
+    description: 'Standard for early elementary',
+    gradeLevel: '1-3'
+  },
+  'grade4-6': {
+    spacingMm: 8.7,
+    label: 'Grades 4-6 (8.7mm / 11/32")',
+    description: 'Wide ruled for upper elementary',
+    gradeLevel: '4-6'
+  },
+  'wide-ruled': {
+    spacingMm: 8.7,
+    label: 'Wide Ruled (8.7mm)',
+    description: 'Standard wide ruled notebook paper',
+    gradeLevel: '4+'
+  },
+  'narrow-ruled': {
+    spacingMm: 6.4,
+    label: 'Narrow Ruled (6.4mm / ¼")',
+    description: 'College ruled for older students',
+    gradeLevel: '7+'
+  },
+  custom: {
+    spacingMm: 12.7,
+    label: 'Custom',
+    description: 'Set your own spacing',
+    gradeLevel: undefined
+  }
+};
+
+// Convert millimeters to pixels at 96 DPI (standard screen resolution)
+export const mmToPixels = (mm: number): number => {
+  return (mm * 96) / 25.4;
+};
+
 export const PAPER_SIZES: Record<string, PaperSizeConfig> = {
   a4: { width: 794, height: 1122, label: 'A4 (210 × 297 mm)' },
   letter: { width: 816, height: 1056, label: 'Letter (8.5 × 11 in)' },
@@ -151,20 +197,17 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   characterWidth: 'normal',
   verticalAlignment: 'baseline',
   textCase: 'none',
+  
+  // Line spacing
+  lineSpacingPreset: 'grade1-3',
+  customLineSpacing: 12.7,
 
   // Enhanced guideline options
-  useCustomGuidelineColors: false,
   customGuidelineColors: {
     top: '#999999',
     middle: '#cccccc',
     baseline: '#999999',
     bottom: '#999999'
-  },
-  guidelineOpacities: {
-    top: 1,
-    middle: 1,
-    baseline: 1,
-    bottom: 1
   },
   dashedGuidelines: false,
   showMarginLines: false,

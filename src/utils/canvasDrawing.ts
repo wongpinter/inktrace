@@ -11,18 +11,22 @@ export const drawGuidelines = (
   guidelineThickness: number,
   guidelineOpacity: number,
   colorStyle: GuidelineColorStyle = 'default',
-  useCustomColors: boolean = false,
   customColors?: { top: string; middle: string; baseline: string; bottom: string },
-  lineOpacities?: { top: number; middle: number; baseline: number; bottom: number },
   dashedPattern: boolean = false,
   emphasizeBaseline: boolean = false,
-  baselineThickness: number = 1.5
+  baselineThickness: number = 1.5,
+  lineHeight?: number
 ) => {
   const { lines, dottedMiddle } = GUIDELINE_STYLES[style];
-  const colors = useCustomColors && customColors ? customColors : GUIDELINE_COLOR_STYLES[colorStyle].colors;
+  const colors = colorStyle === 'custom' && customColors 
+    ? customColors 
+    : GUIDELINE_COLOR_STYLES[colorStyle]?.colors || GUIDELINE_COLOR_STYLES.default.colors;
+  
+  // Use lineHeight if provided, otherwise fall back to fontSize
+  const guidelineHeight = lineHeight || fontSize;
   
   const topLineY = y;
-  const bottomLineY = y + fontSize;
+  const bottomLineY = y + guidelineHeight;
   const totalHeight = bottomLineY - topLineY;
   
   for (let i = 0; i < lines; i++) {
@@ -69,9 +73,6 @@ export const drawGuidelines = (
       }
     }
     
-    // Apply individual line opacity if provided
-    const lineOpacity = lineOpacities ? lineOpacities[lineType] : guidelineOpacity;
-    
     // Apply opacity to the color
     let colorWithOpacity: string;
     if (lineColor.startsWith('#')) {
@@ -79,9 +80,9 @@ export const drawGuidelines = (
       const r = parseInt(lineColor.slice(1, 3), 16);
       const g = parseInt(lineColor.slice(3, 5), 16);
       const b = parseInt(lineColor.slice(5, 7), 16);
-      colorWithOpacity = `rgba(${r}, ${g}, ${b}, ${lineOpacity})`;
+      colorWithOpacity = `rgba(${r}, ${g}, ${b}, ${guidelineOpacity})`;
     } else {
-      colorWithOpacity = lineColor.replace(/[\d.]+\)$/, `${lineOpacity})`);
+      colorWithOpacity = lineColor.replace(/[\d.]+\)$/, `${guidelineOpacity})`);
     }
     
     ctx.strokeStyle = colorWithOpacity;
@@ -245,15 +246,21 @@ export const drawTracingLine = (
   wordSpacing: number = 0,
   characterWidthScale: number = 1.0,
   verticalOffset: number = 0,
-  useCustomColors: boolean = false,
   customColors?: { top: string; middle: string; baseline: string; bottom: string },
-  lineOpacities?: { top: number; middle: number; baseline: number; bottom: number },
   dashedGuidelines: boolean = false,
   emphasizeBaseline: boolean = false,
   baselineThickness: number = 1.5
 ) => {
-  const guidelineTopY = y - fontSize * TOP_LINE_RATIO;
-  const baselineY = guidelineTopY + (fontSize * BASELINE_RATIO) + verticalOffset;
+  // Use lineHeight for guideline calculations to match the actual guideline spacing
+  const guidelineHeight = lineHeight || fontSize;
+  
+  // The text baseline should align with the guideline baseline
+  // Guideline baseline is at: guidelineTopY + (guidelineHeight * BASELINE_RATIO)
+  // Text is drawn at: baselineY + verticalOffset
+  // So: guidelineTopY + (guidelineHeight * BASELINE_RATIO) = y - verticalOffset
+  // Therefore: guidelineTopY = y - verticalOffset - (guidelineHeight * BASELINE_RATIO)
+  const baselineY = y;
+  const guidelineTopY = baselineY - verticalOffset - (guidelineHeight * BASELINE_RATIO);
   
   for (let i = 0; i < lineCount; i++) {
     const currentTopY = guidelineTopY + (i * lineHeight);
@@ -270,12 +277,11 @@ export const drawTracingLine = (
         guidelineThickness, 
         guidelineOpacity, 
         guidelineColorStyle,
-        useCustomColors,
         customColors,
-        lineOpacities,
         dashedGuidelines,
         emphasizeBaseline,
-        baselineThickness
+        baselineThickness,
+        lineHeight
       );
     }
     

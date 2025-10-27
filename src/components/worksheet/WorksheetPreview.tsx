@@ -83,7 +83,7 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
     );
     
     ctx.restore();
-  }, [currentPagePrefs, fontsLoaded, paperSize, currentPreviewPage, totalPreviewPages]);
+  }, [currentPagePrefs, fontsLoaded, paperSize, currentPreviewPage, totalPreviewPages, preferences.lineSpacingPreset, preferences.customLineSpacing]);
 
   const getPreviewText = () => {
     if (currentPagePrefs.emptyPaper) return '';

@@ -1,9 +1,34 @@
 import { jsPDF } from 'jspdf';
-import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LINE_RATIO } from '@/constants/worksheet';
+import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LINE_RATIO, BASELINE_RATIO, LINE_SPACING_PRESETS, mmToPixels } from '@/constants/worksheet';
 import { WorksheetPreferences } from '@/types/worksheet';
 import { drawGuidelines, drawTracingLine, drawMarginLines } from './canvasDrawing';
 import { getWorksheetContent } from './worksheetContent';
 import { transformTextCase, getCharacterWidthScale, getVerticalOffset } from './textFormatting';
+
+// Calculate line height based on spacing preset
+const getLineHeightFromPreset = (preferences: WorksheetPreferences, fontSize: number): number => {
+  // Fallback to default if preset is not defined (for backward compatibility)
+  const preset = preferences.lineSpacingPreset || 'grade1-3';
+  
+  if (preset === 'custom') {
+    const customSpacing = preferences.customLineSpacing || 12.7;
+    const result = mmToPixels(customSpacing);
+    console.log(`✓ Line spacing: custom (${customSpacing.toFixed(1)}mm) = ${Math.round(result)}px`);
+    return result;
+  }
+  
+  const spacingConfig = LINE_SPACING_PRESETS[preset];
+  if (!spacingConfig) {
+    // Fallback to multiplier-based calculation if preset not found
+    const result = fontSize * LINE_HEIGHT_MULTIPLIER;
+    console.log(`⚠ Line spacing: fallback ${Math.round(result)}px (fontSize ${fontSize} × ${LINE_HEIGHT_MULTIPLIER})`);
+    return result;
+  }
+  
+  const result = mmToPixels(spacingConfig.spacingMm);
+  console.log(`✓ Line spacing: ${preset} (${spacingConfig.spacingMm}mm) = ${Math.round(result)}px`);
+  return result;
+};
 
 // Helper function to measure text width as it will actually be rendered
 const measureTextWidth = (
@@ -69,9 +94,7 @@ export const drawPage = (
     characterWidth,
     verticalAlignment,
     textCase,
-    useCustomGuidelineColors,
     customGuidelineColors,
-    guidelineOpacities,
     dashedGuidelines,
     showMarginLines,
     emphasizeBaseline,
@@ -94,7 +117,8 @@ export const drawPage = (
     ctx.fillText(`${footerText} (https://inktrace.wongpinter.com)`, margin, headerY);
   }
 
-  const lineHeight = fontSize * LINE_HEIGHT_MULTIPLIER;
+  // Use preset-based line spacing or fall back to multiplier
+  const lineHeight = getLineHeightFromPreset(preferences, fontSize);
 
   // Draw margin lines if enabled
   if (showMarginLines) {
@@ -104,26 +128,31 @@ export const drawPage = (
   let yPosition = margin + fontSize;
 
   if (emptyPaper) {
-    const lineSetHeight = fontSize * 2;
+    // Use the same line spacing for empty paper
+    const lineSetHeight = lineHeight;
 
     while (yPosition < contentHeight) {
       if (showGuides) {
+        // Position guidelines so the baseline aligns with yPosition
+        // Guideline baseline is at: topY + (lineHeight * BASELINE_RATIO)
+        // So: topY = yPosition - (lineHeight * BASELINE_RATIO)
+        const guidelineTopY = yPosition - (lineHeight * BASELINE_RATIO);
+        
         drawGuidelines(
           ctx,
           margin,
-          yPosition - fontSize * TOP_LINE_RATIO,
+          guidelineTopY,
           contentWidth,
           guidelineStyle,
           fontSize,
           guidelineThickness,
           guidelineOpacity,
           guidelineColorStyle,
-          useCustomGuidelineColors,
           customGuidelineColors,
-          guidelineOpacities,
           dashedGuidelines,
           emphasizeBaseline,
-          baselineThickness
+          baselineThickness,
+          lineHeight
         );
       }
       yPosition += lineSetHeight;
@@ -162,7 +191,7 @@ export const drawPage = (
 
           // Allow text to use slightly more than guideline width to fill the line better
           if (testWidth > contentWidth * 1.12 && currentLine) {
-            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, useCustomGuidelineColors, customGuidelineColors, guidelineOpacities, dashedGuidelines, emphasizeBaseline, baselineThickness);
+            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, customGuidelineColors, dashedGuidelines, emphasizeBaseline, baselineThickness);
             yPosition += lineSetHeight;
             currentLine = word;
 
@@ -173,7 +202,7 @@ export const drawPage = (
         }
 
         if (currentLine && yPosition < contentHeight) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, useCustomGuidelineColors, customGuidelineColors, guidelineOpacities, dashedGuidelines, emphasizeBaseline, baselineThickness);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, customGuidelineColors, dashedGuidelines, emphasizeBaseline, baselineThickness);
           yPosition += lineSetHeight;
         } else {
           break;
@@ -192,7 +221,7 @@ export const drawPage = (
 
         // Allow text to use slightly more than guideline width to fill the line better
         if (testWidth > contentWidth * 1.08 && currentLine) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, useCustomGuidelineColors, customGuidelineColors, guidelineOpacities, dashedGuidelines, emphasizeBaseline, baselineThickness);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, customGuidelineColors, dashedGuidelines, emphasizeBaseline, baselineThickness);
           yPosition += lineSetHeight;
           currentLine = word;
 
@@ -203,7 +232,7 @@ export const drawPage = (
       }
 
       if (currentLine && yPosition < contentHeight) {
-        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, useCustomGuidelineColors, customGuidelineColors, guidelineOpacities, dashedGuidelines, emphasizeBaseline, baselineThickness);
+        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset, customGuidelineColors, dashedGuidelines, emphasizeBaseline, baselineThickness);
       }
     }
   }

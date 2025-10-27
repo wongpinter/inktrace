@@ -5,7 +5,7 @@ export type AlphabetCase = 'uppercase' | 'lowercase' | 'both';
 export type PaperSize = 'a4' | 'letter' | 'legal' | 'a5';
 export type GuidelineStyle = 'standard' | 'elementary' | 'dotted' | 'double';
 export type FontCategory = 'all' | 'educational' | 'handwriting' | 'cursive' | 'display' | 'serif' | 'sansSerif' | 'monospace';
-export type GuidelineColorStyle = 'default' | 'rainbow' | 'pastel' | 'monochrome';
+export type GuidelineColorStyle = 'default' | 'rainbow' | 'pastel' | 'monochrome' | 'custom';
 export type TextTraceStyle = 'dotted' | 'dashed' | 'outline' | 'solid';
 export type CharacterWidth = 'condensed' | 'normal' | 'expanded';
 export type VerticalAlignment = 'top' | 'center' | 'baseline';
@@ -13,6 +13,7 @@ export type TextCase = 'none' | 'uppercase' | 'lowercase' | 'titlecase';
 export type SightWordList = 'dolch-preprimer' | 'dolch-primer' | 'dolch-first' | 'dolch-second' | 'dolch-third' | 'fry-first100' | 'fry-second100' | 'fry-third100';
 export type WordPattern = 'cvc' | 'cvce' | 'ccvc' | 'cvcc' | 'digraph' | 'vowelTeam';
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+export type LineSpacingPreset = 'custom' | 'kindergarten' | 'grade1-3' | 'grade4-6' | 'wide-ruled' | 'narrow-ruled';
 
 export interface PageConfig {
   id: string;
@@ -24,13 +25,6 @@ export interface PageConfig {
   includeSymbols: boolean;
   emptyPaper: boolean;
   repeatText: boolean;
-}
-
-export interface GuidelineOpacities {
-  top: number;
-  middle: number;
-  baseline: number;
-  bottom: number;
 }
 
 export interface CustomGuidelineColors {
@@ -68,10 +62,12 @@ export interface WorksheetPreferences {
   verticalAlignment: VerticalAlignment;
   textCase: TextCase;
   
+  // Line spacing
+  lineSpacingPreset: LineSpacingPreset;
+  customLineSpacing: number; // in mm, used when lineSpacingPreset is 'custom'
+  
   // Enhanced guideline options
-  useCustomGuidelineColors: boolean;
   customGuidelineColors: CustomGuidelineColors;
-  guidelineOpacities: GuidelineOpacities;
   dashedGuidelines: boolean;
   showMarginLines: boolean;
   emphasizeBaseline: boolean;
@@ -135,9 +131,11 @@ export interface WorksheetPreset {
 }
 
 export interface LineSpacingConfig {
-  value: number;
+  preset: LineSpacingPreset;
+  spacingMm: number;
   label: string;
-  description?: string;
+  description: string;
+  gradeLevel?: string;
 }
 
 export interface GuidelineColorConfig {

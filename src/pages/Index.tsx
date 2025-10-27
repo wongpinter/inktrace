@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { useWorksheetPreferences } from '@/hooks/useWorksheetPreferences';
 import { useFontLoader } from '@/hooks/useFontLoader';
 import { generatePDF } from '@/utils/pdfGenerator';
-import { WorksheetHeader } from '@/components/worksheet/WorksheetHeader';
 import { ContentSettings } from '@/components/worksheet/ContentSettings';
-import { FontSelector } from '@/components/worksheet/FontSelector';
-import { PageSettings, TextFormattingSettings } from '@/components/worksheet/PageSettings';
 import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
-import { LineStyleSettings } from '@/components/worksheet/LineStyleSettings';
-import { EnhancedGuidelineSettings } from '@/components/worksheet/EnhancedGuidelineSettings';
 import { PageBuilder } from '@/components/worksheet/PageBuilder';
 import { ContentGenerationSettings } from '@/components/worksheet/ContentGenerationSettings';
+import { DocumentSetupSettings } from '@/components/worksheet/DocumentSetupSettings';
+import { FontTypographySettings } from '@/components/worksheet/FontTypographySettings';
+import { TextAppearanceSettings } from '@/components/worksheet/TextAppearanceSettings';
+import { TextSpacingSettings } from '@/components/worksheet/TextSpacingSettings';
+import { LineSpacingSettings } from '@/components/worksheet/LineSpacingSettings';
+import { GuidelineLayoutSettings } from '@/components/worksheet/GuidelineLayoutSettings';
+import { GuidelineAppearanceSettings } from '@/components/worksheet/GuidelineAppearanceSettings';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
-import { FileText, Type, Settings, Sliders, Palette, Layout, Sparkles } from 'lucide-react';
+import { FileText, Type, Settings, Sparkles, Layout, Ruler, Palette, AlignLeft, Eye } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -134,17 +136,30 @@ const HandwritingWorksheetGenerator = () => {
               <div className="settings-sidebar h-full overflow-y-auto overflow-x-hidden p-6">
                 <div className="space-y-3 pb-6">
                   <AccordionNav
-                    defaultOpen="content"
+                    defaultOpen="document"
                     sections={[
+                      {
+                        id: 'document',
+                        title: 'Document Setup',
+                        icon: <Settings className="w-5 h-5" />,
+                        content: (
+                          <DocumentSetupSettings
+                            preferences={preferences}
+                            updatePreference={updatePreference}
+                          />
+                        )
+                      },
                       {
                         id: 'multipage',
                         title: 'Multi-Page Builder',
                         icon: <Layout className="w-5 h-5" />,
-                        content: (
+                        content: preferences.multiPageMode ? (
                           <PageBuilder
                             preferences={preferences}
                             updatePreference={updatePreference}
                           />
+                        ) : (
+                          <p className="text-sm text-gray-500">Enable Multi-Page Mode in Document Setup to use this feature</p>
                         )
                       },
                       {
@@ -175,62 +190,75 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'font',
-                        title: 'Font',
+                        title: 'Font & Typography',
                         icon: <Type className="w-5 h-5" />,
-                        content: !preferences.emptyPaper && !preferences.multiPageMode ? (
-                          <FontSelector
-                            selectedFont={preferences.selectedFont}
-                            fontCategory={preferences.fontCategory}
+                        content: !preferences.multiPageMode ? (
+                          <FontTypographySettings
+                            preferences={preferences}
+                            updatePreference={updatePreference}
                             searchQuery={searchQuery}
                             filteredFonts={filteredFonts}
-                            onFontChange={(font) => updatePreference('selectedFont', font)}
-                            onCategoryChange={(category) => updatePreference('fontCategory', category)}
                             onSearchChange={setSearchQuery}
                             onFontHover={loadFont}
                           />
                         ) : (
-                          <p className="text-sm text-gray-500">Font selection not available for empty paper</p>
+                          <p className="text-sm text-gray-500">Font settings not available in Multi-Page mode</p>
                         )
                       },
                       {
-                        id: 'page',
-                        title: 'Page Setup',
-                        icon: <Settings className="w-5 h-5" />,
+                        id: 'appearance',
+                        title: 'Text Appearance',
+                        icon: <Eye className="w-5 h-5" />,
+                        content: !preferences.multiPageMode ? (
+                          <TextAppearanceSettings
+                            preferences={preferences}
+                            updatePreference={updatePreference}
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-500">Text appearance not available in Multi-Page mode</p>
+                        )
+                      },
+                      {
+                        id: 'spacing',
+                        title: 'Text Spacing',
+                        icon: <AlignLeft className="w-5 h-5" />,
+                        content: !preferences.multiPageMode ? (
+                          <TextSpacingSettings
+                            preferences={preferences}
+                            updatePreference={updatePreference}
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-500">Text spacing not available in Multi-Page mode</p>
+                        )
+                      },
+                      {
+                        id: 'linespacing',
+                        title: 'Line Spacing',
+                        icon: <Ruler className="w-5 h-5" />,
                         content: (
-                          <PageSettings
+                          <LineSpacingSettings
                             preferences={preferences}
                             updatePreference={updatePreference}
                           />
                         )
                       },
                       {
-                        id: 'formatting',
-                        title: 'Text Formatting',
-                        icon: <Sliders className="w-5 h-5" />,
+                        id: 'guidelinelayout',
+                        title: 'Guideline Layout',
+                        icon: <Ruler className="w-5 h-5" />,
                         content: (
-                          <TextFormattingSettings
+                          <GuidelineLayoutSettings
                             preferences={preferences}
                             updatePreference={updatePreference}
                           />
                         )
                       },
                       {
-                        id: 'guidelines',
-                        title: 'Enhanced Guidelines',
+                        id: 'guidelineappearance',
+                        title: 'Guideline Appearance',
                         icon: <Palette className="w-5 h-5" />,
                         content: (
-                          <EnhancedGuidelineSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        )
-                      },
-                      {
-                        id: 'linestyle',
-                        title: 'Line Styles',
-                        icon: <Sliders className="w-5 h-5" />,
-                        content: (
-                          <LineStyleSettings
+                          <GuidelineAppearanceSettings
                             preferences={preferences}
                             updatePreference={updatePreference}
                           />
