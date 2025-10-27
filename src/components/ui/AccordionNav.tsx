@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 
 interface AccordionSection {
   id: string;
-  title: string;
+  title: string | React.ReactNode;
   icon: React.ReactNode;
   content: React.ReactNode;
 }

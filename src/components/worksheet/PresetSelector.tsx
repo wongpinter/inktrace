@@ -21,41 +21,32 @@ const presetIcons: Record<string, React.ReactNode> = {
 
 export const PresetSelector: React.FC<PresetSelectorProps> = ({ onSelectPreset }) => {
   return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Start Presets</h3>
-        <p className="text-xs text-gray-500 mb-4">
-          Choose a preset to quickly configure your worksheet for common use cases
-        </p>
-      </div>
+    <div className="space-y-3">
+      <p className="text-xs text-gray-500">
+        Quick start templates for common use cases
+      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {Object.entries(WORKSHEET_PRESETS).map(([key, preset]) => (
           <button
             key={key}
             onClick={() => onSelectPreset(preset.preferences)}
-            className="flex items-start p-4 text-left border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-all group"
+            className="flex flex-col items-center p-3 text-center border border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-all group"
+            title={preset.description}
           >
-            <div className="mr-3 group-hover:scale-110 transition-transform flex-shrink-0">
+            <div className="mb-2 group-hover:scale-110 transition-transform">
               {presetIcons[key]}
             </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-gray-800 group-hover:text-indigo-700">
-                {preset.name}
-              </h4>
-              <p className="text-xs text-gray-600 mt-1">
-                {preset.description}
-              </p>
-            </div>
+            <span className="text-xs font-medium text-gray-700 group-hover:text-indigo-700">
+              {preset.name}
+            </span>
           </button>
         ))}
       </div>
 
-      <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-        <p className="text-xs text-amber-800">
-          <span className="font-semibold">💡 Tip:</span> After selecting a preset, you can customize any settings to match your specific needs.
-        </p>
-      </div>
+      <p className="text-xs text-gray-500 italic">
+        💡 Hover to see description, click to apply
+      </p>
     </div>
   );
 };

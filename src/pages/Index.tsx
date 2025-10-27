@@ -17,6 +17,8 @@ import { GuidelineAppearanceSettings } from '@/components/worksheet/GuidelineApp
 import { PresetSelector } from '@/components/worksheet/PresetSelector';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
+import { InfoTooltip } from '@/components/ui/InfoTooltip';
+import { SETTINGS_INFO } from '@/constants/settingsInfo';
 import { FileText, Type, Settings, Sparkles, Layout, Ruler, Palette, AlignLeft, Eye, Zap } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
@@ -149,7 +151,12 @@ const HandwritingWorksheetGenerator = () => {
                     sections={[
                       {
                         id: 'presets',
-                        title: 'Quick Start Presets',
+                        title: (
+                          <span className="flex items-center">
+                            Quick Start Presets
+                            <InfoTooltip {...SETTINGS_INFO.presets} />
+                          </span>
+                        ),
                         icon: <Zap className="w-5 h-5" />,
                         content: (
                           <PresetSelector
@@ -159,7 +166,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'document',
-                        title: 'Document Setup',
+                        title: (
+                          <span className="flex items-center">
+                            Document Setup
+                            <InfoTooltip {...SETTINGS_INFO.document} />
+                          </span>
+                        ),
                         icon: <Settings className="w-5 h-5" />,
                         content: (
                           <DocumentSetupSettings
@@ -183,7 +195,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'content',
-                        title: 'Content',
+                        title: (
+                          <span className="flex items-center">
+                            Content
+                            <InfoTooltip {...SETTINGS_INFO.content} />
+                          </span>
+                        ),
                         icon: <FileText className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <ContentSettings
@@ -196,7 +213,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'contentgen',
-                        title: 'Content Generation',
+                        title: (
+                          <span className="flex items-center">
+                            Content Generation
+                            <InfoTooltip {...SETTINGS_INFO.generation} />
+                          </span>
+                        ),
                         icon: <Sparkles className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <ContentGenerationSettings
@@ -209,7 +231,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'font',
-                        title: 'Font & Typography',
+                        title: (
+                          <span className="flex items-center">
+                            Font & Typography
+                            <InfoTooltip {...SETTINGS_INFO.font} />
+                          </span>
+                        ),
                         icon: <Type className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <FontTypographySettings
@@ -226,7 +253,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'appearance',
-                        title: 'Text Appearance',
+                        title: (
+                          <span className="flex items-center">
+                            Text Appearance
+                            <InfoTooltip {...SETTINGS_INFO.appearance} />
+                          </span>
+                        ),
                         icon: <Eye className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <TextAppearanceSettings
@@ -239,7 +271,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'spacing',
-                        title: 'Text Spacing',
+                        title: (
+                          <span className="flex items-center">
+                            Text Spacing
+                            <InfoTooltip {...SETTINGS_INFO.spacing} />
+                          </span>
+                        ),
                         icon: <AlignLeft className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <TextSpacingSettings
@@ -252,7 +289,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'linespacing',
-                        title: 'Line Spacing',
+                        title: (
+                          <span className="flex items-center">
+                            Line Spacing
+                            <InfoTooltip {...SETTINGS_INFO.lineSpacing} />
+                          </span>
+                        ),
                         icon: <Ruler className="w-5 h-5" />,
                         content: (
                           <LineSpacingSettings
@@ -263,7 +305,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'guidelinelayout',
-                        title: 'Guideline Layout',
+                        title: (
+                          <span className="flex items-center">
+                            Guideline Layout
+                            <InfoTooltip {...SETTINGS_INFO.guidelineLayout} />
+                          </span>
+                        ),
                         icon: <Ruler className="w-5 h-5" />,
                         content: (
                           <GuidelineLayoutSettings
@@ -274,7 +321,12 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'guidelineappearance',
-                        title: 'Guideline Appearance',
+                        title: (
+                          <span className="flex items-center">
+                            Guideline Appearance
+                            <InfoTooltip {...SETTINGS_INFO.guidelineAppearance} />
+                          </span>
+                        ),
                         icon: <Palette className="w-5 h-5" />,
                         content: (
                           <GuidelineAppearanceSettings
