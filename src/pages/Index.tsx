@@ -10,9 +10,10 @@ import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
 import { LineStyleSettings } from '@/components/worksheet/LineStyleSettings';
 import { EnhancedGuidelineSettings } from '@/components/worksheet/EnhancedGuidelineSettings';
 import { PageBuilder } from '@/components/worksheet/PageBuilder';
+import { ContentGenerationSettings } from '@/components/worksheet/ContentGenerationSettings';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
-import { FileText, Type, Settings, Sliders, Palette, Layout } from 'lucide-react';
+import { FileText, Type, Settings, Sliders, Palette, Layout, Sparkles } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -157,6 +158,19 @@ const HandwritingWorksheetGenerator = () => {
                           />
                         ) : (
                           <p className="text-sm text-gray-500">Content is managed in Multi-Page Builder</p>
+                        )
+                      },
+                      {
+                        id: 'contentgen',
+                        title: 'Content Generation',
+                        icon: <Sparkles className="w-5 h-5" />,
+                        content: !preferences.multiPageMode ? (
+                          <ContentGenerationSettings
+                            preferences={preferences}
+                            updatePreference={updatePreference}
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-500">Content generation not available in Multi-Page mode</p>
                         )
                       },
                       {

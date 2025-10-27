@@ -8,7 +8,16 @@ A modern, free web application for creating custom handwriting practice workshee
 - **Multi-Page Builder**: Create worksheets with different content on each page
 - **Customizable Fonts**: 100+ Google Fonts including educational handwriting fonts
 - **Multiple Worksheet Types**: Text practice, specific letters, full alphabet, or numbers
+- **Content Generation**: Smart tools to generate educational content automatically
 - **PDF Export**: High-quality 300 DPI print-ready PDFs
+
+### Content Generation Tools
+- **Sight Words Lists**: Dolch (Pre-Primer through 3rd Grade) and Fry (First 300 words)
+- **Word Patterns**: CVC, CVCe, CCVC, CVCC, Digraphs, and Vowel Teams
+- **Sentence Templates**: Pre-built templates with random word generation
+- **Name Practice**: Dedicated mode for practicing student names
+- **Custom Word Lists**: Import/export your own word lists
+- **Random Generator**: Create random word sets by difficulty level
 
 ### Customization Options
 - **Flexible Guidelines**: Multiple line styles (elementary, standard, dotted, double)

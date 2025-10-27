@@ -171,6 +171,16 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   emphasizeBaseline: false,
   baselineThickness: 1.5,
 
+  // Content generation
+  contentGeneration: {
+    customWordList: [],
+    useNamePractice: false,
+    practiceName: '',
+    useSentenceTemplate: false,
+    sentenceTemplate: '',
+    randomWordCount: 10
+  },
+
   // Multi-page mode
   multiPageMode: false,
   pages: [],

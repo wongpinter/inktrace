@@ -10,6 +10,9 @@ export type TextTraceStyle = 'dotted' | 'dashed' | 'outline' | 'solid';
 export type CharacterWidth = 'condensed' | 'normal' | 'expanded';
 export type VerticalAlignment = 'top' | 'center' | 'baseline';
 export type TextCase = 'none' | 'uppercase' | 'lowercase' | 'titlecase';
+export type SightWordList = 'dolch-preprimer' | 'dolch-primer' | 'dolch-first' | 'dolch-second' | 'dolch-third' | 'fry-first100' | 'fry-second100' | 'fry-third100';
+export type WordPattern = 'cvc' | 'cvce' | 'ccvc' | 'cvcc' | 'digraph' | 'vowelTeam';
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 export interface PageConfig {
   id: string;
@@ -73,6 +76,9 @@ export interface WorksheetPreferences {
   showMarginLines: boolean;
   emphasizeBaseline: boolean;
   baselineThickness: number;
+
+  // Content generation
+  contentGeneration: ContentGenerationSettings;
 
   // Multi-page mode
   multiPageMode: boolean;
@@ -138,4 +144,16 @@ export interface GuidelineColorConfig {
   style: GuidelineColorStyle;
   colors: string[];
   label: string;
+}
+
+export interface ContentGenerationSettings {
+  sightWordList?: SightWordList;
+  wordPattern?: WordPattern;
+  customWordList: string[];
+  useNamePractice: boolean;
+  practiceName: string;
+  useSentenceTemplate: boolean;
+  sentenceTemplate: string;
+  randomWordDifficulty?: DifficultyLevel;
+  randomWordCount: number;
 }
