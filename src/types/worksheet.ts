@@ -107,6 +107,8 @@ export interface GuidelineStyleConfig {
   label: string;
   lines: number;
   dottedMiddle: boolean;
+  useEducationalProportions?: boolean; // Use 3:3:2 ratio (ascender:x-height:descender)
+  showDescenderSpace?: boolean; // Show space below baseline for descenders
 }
 
 export interface FooterConfig {

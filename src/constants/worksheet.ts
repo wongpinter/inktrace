@@ -3,8 +3,14 @@ import { PaperSizeConfig, GuidelineStyleConfig, FontCategory, WorksheetPreferenc
 export const STORAGE_KEY = 'handwriting-worksheet-preferences';
 
 // Canvas drawing constants
-export const BASELINE_RATIO = 0.65;
-export const TOP_LINE_RATIO = 0.35;
+// Educational standard proportions: 3:3:2 ratio (ascender:x-height:descender)
+// Total height = 3 + 3 + 2 = 8 parts
+export const ASCENDER_RATIO = 3 / 8;      // 0.375 - Space above midline to headline
+export const X_HEIGHT_RATIO = 3 / 8;      // 0.375 - Space from baseline to midline
+export const DESCENDER_RATIO = 2 / 8;     // 0.25  - Space below baseline
+export const BASELINE_RATIO = (DESCENDER_RATIO + X_HEIGHT_RATIO); // 0.625 - Baseline position from top
+export const MIDLINE_RATIO = DESCENDER_RATIO; // 0.25 - Midline position from top
+export const TOP_LINE_RATIO = 0.35; // Legacy support
 export const LINE_HEIGHT_MULTIPLIER = 1.8;
 export const LINE_SET_HEIGHT_MULTIPLIER = 1.5;
 
@@ -84,10 +90,30 @@ export const PAPER_SIZES: Record<string, PaperSizeConfig> = {
 };
 
 export const GUIDELINE_STYLES: Record<string, GuidelineStyleConfig> = {
-  standard: { label: 'Standard (3 lines)', lines: 3, dottedMiddle: false },
-  elementary: { label: 'Elementary (4 lines)', lines: 4, dottedMiddle: false },
-  dotted: { label: 'Dotted Middle (3 lines)', lines: 3, dottedMiddle: true },
-  double: { label: 'Double Lines (2 lines)', lines: 2, dottedMiddle: false }
+  standard: { 
+    label: 'Standard (3 lines)', 
+    lines: 3, 
+    dottedMiddle: false 
+  },
+  elementary: { 
+    label: 'Elementary (4 lines)', 
+    lines: 4, 
+    dottedMiddle: false,
+    useEducationalProportions: true,
+    showDescenderSpace: true
+  },
+  dotted: { 
+    label: 'Dotted Midline (4 lines)', 
+    lines: 4, 
+    dottedMiddle: true,
+    useEducationalProportions: true,
+    showDescenderSpace: true
+  },
+  double: { 
+    label: 'Two-Line System (2 lines)', 
+    lines: 2, 
+    dottedMiddle: false 
+  }
 };
 
 export const GOOGLE_FONTS = {

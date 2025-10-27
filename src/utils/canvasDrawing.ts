@@ -1,4 +1,4 @@
-import { GUIDELINE_STYLES, BASELINE_RATIO, TOP_LINE_RATIO, LINE_HEIGHT_MULTIPLIER, GUIDELINE_COLOR_STYLES, TEXT_TRACE_STYLES } from '@/constants/worksheet';
+import { GUIDELINE_STYLES, BASELINE_RATIO, TOP_LINE_RATIO, MIDLINE_RATIO, DESCENDER_RATIO, ASCENDER_RATIO, X_HEIGHT_RATIO, LINE_HEIGHT_MULTIPLIER, GUIDELINE_COLOR_STYLES, TEXT_TRACE_STYLES } from '@/constants/worksheet';
 import { GuidelineStyle, GuidelineColorStyle, TextTraceStyle } from '@/types/worksheet';
 
 export const drawGuidelines = (
@@ -17,7 +17,8 @@ export const drawGuidelines = (
   baselineThickness: number = 1.5,
   lineHeight?: number
 ) => {
-  const { lines, dottedMiddle } = GUIDELINE_STYLES[style];
+  const styleConfig = GUIDELINE_STYLES[style];
+  const { lines, dottedMiddle, useEducationalProportions, showDescenderSpace } = styleConfig;
   const colors = colorStyle === 'custom' && customColors 
     ? customColors 
     : GUIDELINE_COLOR_STYLES[colorStyle]?.colors || GUIDELINE_COLOR_STYLES.default.colors;
@@ -54,22 +55,48 @@ export const drawGuidelines = (
         lineType = 'bottom';
       }
     } else if (lines === 4) {
-      if (i === 0) {
-        currentY = topLineY;
-        lineColor = colors.top;
-        lineType = 'top';
-      } else if (i === 1) {
-        currentY = topLineY + (totalHeight * TOP_LINE_RATIO);
-        lineColor = colors.middle;
-        lineType = 'middle';
-      } else if (i === 2) {
-        currentY = topLineY + (totalHeight * BASELINE_RATIO);
-        lineColor = colors.baseline;
-        lineType = 'baseline';
+      if (useEducationalProportions) {
+        // Educational 3:3:2 ratio (ascender:x-height:descender)
+        // Line 0: Descender line (bottom)
+        // Line 1: Baseline
+        // Line 2: Midline (dotted)
+        // Line 3: Headline (top)
+        if (i === 0) {
+          currentY = bottomLineY; // Descender line
+          lineColor = colors.bottom;
+          lineType = 'bottom';
+        } else if (i === 1) {
+          currentY = topLineY + (totalHeight * DESCENDER_RATIO); // Baseline
+          lineColor = colors.baseline;
+          lineType = 'baseline';
+        } else if (i === 2) {
+          currentY = topLineY + (totalHeight * (DESCENDER_RATIO + X_HEIGHT_RATIO)); // Midline
+          lineColor = colors.middle;
+          lineType = 'middle';
+        } else {
+          currentY = topLineY; // Headline
+          lineColor = colors.top;
+          lineType = 'top';
+        }
       } else {
-        currentY = bottomLineY;
-        lineColor = colors.bottom;
-        lineType = 'bottom';
+        // Legacy proportions
+        if (i === 0) {
+          currentY = topLineY;
+          lineColor = colors.top;
+          lineType = 'top';
+        } else if (i === 1) {
+          currentY = topLineY + (totalHeight * TOP_LINE_RATIO);
+          lineColor = colors.middle;
+          lineType = 'middle';
+        } else if (i === 2) {
+          currentY = topLineY + (totalHeight * BASELINE_RATIO);
+          lineColor = colors.baseline;
+          lineType = 'baseline';
+        } else {
+          currentY = bottomLineY;
+          lineColor = colors.bottom;
+          lineType = 'bottom';
+        }
       }
     }
     
