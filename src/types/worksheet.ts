@@ -23,6 +23,20 @@ export interface PageConfig {
   repeatText: boolean;
 }
 
+export interface GuidelineOpacities {
+  top: number;
+  middle: number;
+  baseline: number;
+  bottom: number;
+}
+
+export interface CustomGuidelineColors {
+  top: string;
+  middle: string;
+  baseline: string;
+  bottom: string;
+}
+
 export interface WorksheetPreferences {
   // Global settings
   fontSize: number;
@@ -50,6 +64,15 @@ export interface WorksheetPreferences {
   characterWidth: CharacterWidth;
   verticalAlignment: VerticalAlignment;
   textCase: TextCase;
+  
+  // Enhanced guideline options
+  useCustomGuidelineColors: boolean;
+  customGuidelineColors: CustomGuidelineColors;
+  guidelineOpacities: GuidelineOpacities;
+  dashedGuidelines: boolean;
+  showMarginLines: boolean;
+  emphasizeBaseline: boolean;
+  baselineThickness: number;
 
   // Multi-page mode
   multiPageMode: boolean;

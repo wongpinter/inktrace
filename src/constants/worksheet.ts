@@ -152,6 +152,25 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   verticalAlignment: 'baseline',
   textCase: 'none',
 
+  // Enhanced guideline options
+  useCustomGuidelineColors: false,
+  customGuidelineColors: {
+    top: '#999999',
+    middle: '#cccccc',
+    baseline: '#999999',
+    bottom: '#999999'
+  },
+  guidelineOpacities: {
+    top: 1,
+    middle: 1,
+    baseline: 1,
+    bottom: 1
+  },
+  dashedGuidelines: false,
+  showMarginLines: false,
+  emphasizeBaseline: false,
+  baselineThickness: 1.5,
+
   // Multi-page mode
   multiPageMode: false,
   pages: [],

@@ -10,66 +10,130 @@ export const drawGuidelines = (
   fontSize: number,
   guidelineThickness: number,
   guidelineOpacity: number,
-  colorStyle: GuidelineColorStyle = 'default'
+  colorStyle: GuidelineColorStyle = 'default',
+  useCustomColors: boolean = false,
+  customColors?: { top: string; middle: string; baseline: string; bottom: string },
+  lineOpacities?: { top: number; middle: number; baseline: number; bottom: number },
+  dashedPattern: boolean = false,
+  emphasizeBaseline: boolean = false,
+  baselineThickness: number = 1.5
 ) => {
   const { lines, dottedMiddle } = GUIDELINE_STYLES[style];
-  const colors = GUIDELINE_COLOR_STYLES[colorStyle].colors;
+  const colors = useCustomColors && customColors ? customColors : GUIDELINE_COLOR_STYLES[colorStyle].colors;
   
   const topLineY = y;
   const bottomLineY = y + fontSize;
   const totalHeight = bottomLineY - topLineY;
   
-  ctx.lineWidth = guidelineThickness;
-
   for (let i = 0; i < lines; i++) {
-    let currentY;
-    let lineColor;
+    let currentY: number = 0;
+    let lineColor: string = '';
+    let lineType: 'top' | 'middle' | 'baseline' | 'bottom' = 'top';
+    let currentThickness = guidelineThickness;
     
     if (lines === 2) {
       currentY = i === 0 ? topLineY : bottomLineY;
       lineColor = i === 0 ? colors.top : colors.bottom;
+      lineType = i === 0 ? 'top' : 'bottom';
     } else if (lines === 3) {
       if (i === 0) {
         currentY = topLineY;
         lineColor = colors.top;
+        lineType = 'top';
       } else if (i === 1) {
         currentY = topLineY + (totalHeight * BASELINE_RATIO);
         lineColor = colors.baseline;
+        lineType = 'baseline';
       } else {
         currentY = bottomLineY;
         lineColor = colors.bottom;
+        lineType = 'bottom';
       }
     } else if (lines === 4) {
       if (i === 0) {
         currentY = topLineY;
         lineColor = colors.top;
+        lineType = 'top';
       } else if (i === 1) {
         currentY = topLineY + (totalHeight * TOP_LINE_RATIO);
         lineColor = colors.middle;
+        lineType = 'middle';
       } else if (i === 2) {
         currentY = topLineY + (totalHeight * BASELINE_RATIO);
         lineColor = colors.baseline;
+        lineType = 'baseline';
       } else {
         currentY = bottomLineY;
         lineColor = colors.bottom;
+        lineType = 'bottom';
       }
     }
     
+    // Apply individual line opacity if provided
+    const lineOpacity = lineOpacities ? lineOpacities[lineType] : guidelineOpacity;
+    
     // Apply opacity to the color
-    const colorWithOpacity = lineColor!.replace(/[\d.]+\)$/, `${guidelineOpacity})`);
+    let colorWithOpacity: string;
+    if (lineColor.startsWith('#')) {
+      // Convert hex to rgba
+      const r = parseInt(lineColor.slice(1, 3), 16);
+      const g = parseInt(lineColor.slice(3, 5), 16);
+      const b = parseInt(lineColor.slice(5, 7), 16);
+      colorWithOpacity = `rgba(${r}, ${g}, ${b}, ${lineOpacity})`;
+    } else {
+      colorWithOpacity = lineColor.replace(/[\d.]+\)$/, `${lineOpacity})`);
+    }
+    
     ctx.strokeStyle = colorWithOpacity;
     
-    if (dottedMiddle && ((i === 1 && lines === 3) || (i === 1 && lines === 4))) {
+    // Apply baseline emphasis
+    if (emphasizeBaseline && lineType === 'baseline') {
+      currentThickness = baselineThickness;
+    }
+    
+    ctx.lineWidth = currentThickness;
+    
+    // Apply dash pattern
+    if (dashedPattern) {
+      ctx.setLineDash([5, 5]);
+    } else if (dottedMiddle && ((i === 1 && lines === 3) || (i === 1 && lines === 4))) {
       ctx.setLineDash([3, 3]);
     } else {
       ctx.setLineDash([]);
     }
     
     ctx.beginPath();
-    ctx.moveTo(x, currentY!);
-    ctx.lineTo(x + width, currentY!);
+    ctx.moveTo(x, currentY);
+    ctx.lineTo(x + width, currentY);
     ctx.stroke();
   }
+  
+  ctx.setLineDash([]);
+};
+
+export const drawMarginLines = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  thickness: number = 1
+) => {
+  ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+  ctx.lineWidth = thickness;
+  ctx.setLineDash([10, 5]);
+  
+  // Left margin
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + height);
+  ctx.stroke();
+  
+  // Right margin
+  ctx.beginPath();
+  ctx.moveTo(x + width, y);
+  ctx.lineTo(x + width, y + height);
+  ctx.stroke();
   
   ctx.setLineDash([]);
 };
@@ -180,7 +244,13 @@ export const drawTracingLine = (
   showStartingDots: boolean,
   wordSpacing: number = 0,
   characterWidthScale: number = 1.0,
-  verticalOffset: number = 0
+  verticalOffset: number = 0,
+  useCustomColors: boolean = false,
+  customColors?: { top: string; middle: string; baseline: string; bottom: string },
+  lineOpacities?: { top: number; middle: number; baseline: number; bottom: number },
+  dashedGuidelines: boolean = false,
+  emphasizeBaseline: boolean = false,
+  baselineThickness: number = 1.5
 ) => {
   const guidelineTopY = y - fontSize * TOP_LINE_RATIO;
   const baselineY = guidelineTopY + (fontSize * BASELINE_RATIO) + verticalOffset;
@@ -190,7 +260,23 @@ export const drawTracingLine = (
     const currentBaselineY = baselineY + (i * lineHeight);
     
     if (showGuides) {
-      drawGuidelines(ctx, x, currentTopY, contentWidth, guidelineStyle, fontSize, guidelineThickness, guidelineOpacity, guidelineColorStyle);
+      drawGuidelines(
+        ctx, 
+        x, 
+        currentTopY, 
+        contentWidth, 
+        guidelineStyle, 
+        fontSize, 
+        guidelineThickness, 
+        guidelineOpacity, 
+        guidelineColorStyle,
+        useCustomColors,
+        customColors,
+        lineOpacities,
+        dashedGuidelines,
+        emphasizeBaseline,
+        baselineThickness
+      );
     }
     
     if (i === 0) {

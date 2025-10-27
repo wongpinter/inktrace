@@ -8,6 +8,7 @@ import { FontSelector } from '@/components/worksheet/FontSelector';
 import { PageSettings, TextFormattingSettings } from '@/components/worksheet/PageSettings';
 import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
 import { LineStyleSettings } from '@/components/worksheet/LineStyleSettings';
+import { EnhancedGuidelineSettings } from '@/components/worksheet/EnhancedGuidelineSettings';
 import { PageBuilder } from '@/components/worksheet/PageBuilder';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 
@@ -125,6 +126,11 @@ const HandwritingWorksheetGenerator = () => {
                 />
 
                 <TextFormattingSettings
+                  preferences={preferences}
+                  updatePreference={updatePreference}
+                />
+
+                <EnhancedGuidelineSettings
                   preferences={preferences}
                   updatePreference={updatePreference}
                 />
