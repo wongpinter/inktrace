@@ -215,7 +215,8 @@ export const TEXT_TRACE_STYLES = {
   dotted: { label: 'Dotted', dashPattern: [2, 3] },
   dashed: { label: 'Dashed', dashPattern: [8, 4] },
   outline: { label: 'Outline Only', dashPattern: [] },
-  solid: { label: 'Solid (Light)', dashPattern: [] }
+  solid: { label: 'Solid (Light)', dashPattern: [] },
+  thin: { label: 'Thin Dashed (Pen Tracing)', dashPattern: [6, 3] }
 };
 
 export const DEFAULT_PREFERENCES: WorksheetPreferences = {

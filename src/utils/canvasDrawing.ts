@@ -204,6 +204,12 @@ export const drawTracedText = (
         ctx.lineWidth = 1.5;
         ctx.setLineDash([]);
         ctx.strokeText(char, currentX, y);
+      } else if (traceStyle === 'thin') {
+        // Thin dashed outline for pen tracing
+        ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.7})`;
+        ctx.lineWidth = 0.8;
+        ctx.setLineDash(style.dashPattern);
+        ctx.strokeText(char, currentX, y);
       } else {
         // Dotted or dashed
         ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.8})`;
@@ -235,6 +241,12 @@ export const drawTracedText = (
       ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.8})`;
       ctx.lineWidth = 1.5;
       ctx.setLineDash([]);
+      ctx.strokeText(text, x, y);
+    } else if (traceStyle === 'thin') {
+      // Thin dashed outline for pen tracing
+      ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.7})`;
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash(style.dashPattern);
       ctx.strokeText(text, x, y);
     } else {
       ctx.strokeStyle = `rgba(0, 0, 0, ${textOpacity * 0.8})`;
