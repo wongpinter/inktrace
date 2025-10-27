@@ -1,0 +1,195 @@
+import React from 'react';
+import { Settings, Download } from 'lucide-react';
+import { WorksheetPreferences, PaperSize, GuidelineStyle } from '@/types/worksheet';
+import { PAPER_SIZES, GUIDELINE_STYLES } from '@/constants/worksheet';
+
+interface PageSettingsProps {
+  preferences: WorksheetPreferences;
+  updatePreference: <K extends keyof WorksheetPreferences>(key: K, value: WorksheetPreferences[K]) => void;
+  onGeneratePDF: () => void;
+}
+
+export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updatePreference, onGeneratePDF }) => {
+  const {
+    paperSize,
+    pageCount,
+    fontSize,
+    lineCount,
+    guidelineStyle,
+    guidelineThickness,
+    showGuides,
+    fullMarginGuides,
+    textOpacity,
+    guidelineOpacity,
+    text,
+    worksheetType,
+    emptyPaper,
+    includeNumbers,
+    includeSymbols
+  } = preferences;
+
+  const isDisabled = (!text && worksheetType === 'text' && !emptyPaper) || 
+                     (worksheetType === 'numbers' && !includeNumbers && !includeSymbols);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 text-indigo-600 font-semibold">
+        <Settings className="w-5 h-5" />
+        <h2 className="text-lg">Page & Line Settings</h2>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Paper Size
+        </label>
+        <select
+          value={paperSize}
+          onChange={(e) => updatePreference('paperSize', e.target.value as PaperSize)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          {Object.entries(PAPER_SIZES).map(([key, { label }]) => (
+            <option key={key} value={key}>{label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Number of Pages: {pageCount}
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          value={pageCount}
+          onChange={(e) => updatePreference('pageCount', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Font Size: {fontSize}px
+        </label>
+        <input
+          type="range"
+          min="24"
+          max="72"
+          step="2"
+          value={fontSize}
+          onChange={(e) => updatePreference('fontSize', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Practice Lines: {lineCount}
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="5"
+          value={lineCount}
+          onChange={(e) => updatePreference('lineCount', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Guideline Style
+        </label>
+        <select
+          value={guidelineStyle}
+          onChange={(e) => updatePreference('guidelineStyle', e.target.value as GuidelineStyle)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          {Object.entries(GUIDELINE_STYLES).map(([key, { label }]) => (
+            <option key={key} value={key}>{label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Guideline Thickness: {guidelineThickness.toFixed(2)}px
+        </label>
+        <input
+          type="range"
+          min="0.25"
+          max="3"
+          step="0.25"
+          value={guidelineThickness}
+          onChange={(e) => updatePreference('guidelineThickness', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          id="guides"
+          checked={showGuides}
+          onChange={(e) => updatePreference('showGuides', e.target.checked)}
+          className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+        />
+        <label htmlFor="guides" className="text-sm font-semibold text-gray-700">
+          Show Guidelines
+        </label>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          id="fullMargin"
+          checked={fullMarginGuides}
+          onChange={(e) => updatePreference('fullMarginGuides', e.target.checked)}
+          className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+        />
+        <label htmlFor="fullMargin" className="text-sm font-semibold text-gray-700">
+          Full Margin Guidelines
+        </label>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Text Opacity: {Math.round(textOpacity * 100)}%
+        </label>
+        <input
+          type="range"
+          min="0.1"
+          max="1"
+          step="0.1"
+          value={textOpacity}
+          onChange={(e) => updatePreference('textOpacity', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Guideline Opacity: {Math.round(guidelineOpacity * 100)}%
+        </label>
+        <input
+          type="range"
+          min="0.1"
+          max="1"
+          step="0.1"
+          value={guidelineOpacity}
+          onChange={(e) => updatePreference('guidelineOpacity', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <button
+        onClick={onGeneratePDF}
+        disabled={isDisabled}
+        className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+      >
+        <Download className="w-5 h-5" />
+        Download {pageCount} Page{pageCount > 1 ? 's' : ''} as PDF
+      </button>
+    </div>
+  );
+};
