@@ -28,6 +28,13 @@ const HandwritingWorksheetGenerator = () => {
   const [textOpacity, setTextOpacity] = useState(0.3);
   const [guidelineOpacity, setGuidelineOpacity] = useState(1);
   
+  // New worksheet type options
+  const [worksheetType, setWorksheetType] = useState<'text' | 'letters' | 'alphabet' | 'numbers'>('text');
+  const [specificLetters, setSpecificLetters] = useState('Aa Bb Cc Dd');
+  const [alphabetCase, setAlphabetCase] = useState<'uppercase' | 'lowercase' | 'both'>('both');
+  const [includeNumbers, setIncludeNumbers] = useState(true);
+  const [includeSymbols, setIncludeSymbols] = useState(true);
+  
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // --- CONSTANTS ---
@@ -227,6 +234,32 @@ const HandwritingWorksheetGenerator = () => {
     }
   };
 
+  // Helper function to generate content based on worksheet type
+  const getWorksheetContent = () => {
+    switch (worksheetType) {
+      case 'text':
+        return text;
+      case 'letters':
+        return specificLetters;
+      case 'alphabet':
+        const uppercase = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z';
+        const lowercase = 'a b c d e f g h i j k l m n o p q r s t u v w x y z';
+        if (alphabetCase === 'uppercase') return uppercase;
+        if (alphabetCase === 'lowercase') return lowercase;
+        return `${uppercase}   ${lowercase}`;
+      case 'numbers':
+        let content = '';
+        if (includeNumbers) content += '0 1 2 3 4 5 6 7 8 9';
+        if (includeSymbols) {
+          if (content) content += '   ';
+          content += '! @ # $ % ^ & * ( ) - + = [ ] { } ; : \' " , . < > ? /';
+        }
+        return content;
+      default:
+        return text;
+    }
+  };
+
   // REFACTORED: All drawing logic is now in this one function
   const drawPage = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     ctx.fillStyle = '#ffffff';
@@ -254,10 +287,12 @@ const HandwritingWorksheetGenerator = () => {
       
       ctx.font = `${fontSize}px "${selectedFont}"`;
       
+      const contentToDisplay = getWorksheetContent();
+      
       if (repeatText) {
         // Repeat the entire text to fill the page
         while (yPosition < contentHeight) {
-          const words = text.split(' ');
+          const words = contentToDisplay.split(' ');
           let currentLine = '';
 
           for (let i = 0; i < words.length; i++) {
@@ -290,7 +325,7 @@ const HandwritingWorksheetGenerator = () => {
         }
       } else {
         // Draw text once, breaking into lines as needed
-        const words = text.split(' ');
+        const words = contentToDisplay.split(' ');
         let currentLine = '';
 
         for (let i = 0; i < words.length; i++) {
@@ -490,12 +525,17 @@ const HandwritingWorksheetGenerator = () => {
         setPageCount(preferences.pageCount ?? 1);
         setDottedFont(preferences.dottedFont ?? true);
         setGuidelineStyle(preferences.guidelineStyle ?? 'elementary');
-        setGuidelineThickness(preferences.guidelineThickness ?? 1);
+        setGuidelineThickness(preferences.guidelineThickness ?? 0.5);
         setEmptyPaper(preferences.emptyPaper ?? false);
         setRepeatText(preferences.repeatText ?? false);
         setFullMarginGuides(preferences.fullMarginGuides ?? false);
         setTextOpacity(preferences.textOpacity ?? 0.3);
         setGuidelineOpacity(preferences.guidelineOpacity ?? 1);
+        setWorksheetType(preferences.worksheetType ?? 'text');
+        setSpecificLetters(preferences.specificLetters ?? 'Aa Bb Cc Dd');
+        setAlphabetCase(preferences.alphabetCase ?? 'both');
+        setIncludeNumbers(preferences.includeNumbers ?? true);
+        setIncludeSymbols(preferences.includeSymbols ?? true);
       } catch (error) {
         console.error('Failed to load preferences on mount:', error);
       }
@@ -503,7 +543,7 @@ const HandwritingWorksheetGenerator = () => {
   }, []);
 
   useEffect(() => {
-    if (text || emptyPaper) {
+    if (text || emptyPaper || worksheetType !== 'text') {
       loadFont(selectedFont);
       // Wait a moment for font to potentially load before previewing
       setTimeout(preview, 100); 
@@ -512,7 +552,9 @@ const HandwritingWorksheetGenerator = () => {
     text, fontSize, lineCount, selectedFont, showGuides, 
     dottedFont, guidelineStyle, guidelineThickness, 
     emptyPaper, paperSize, fontsLoaded, repeatText,
-    fullMarginGuides, textOpacity, guidelineOpacity
+    fullMarginGuides, textOpacity, guidelineOpacity,
+    worksheetType, specificLetters, alphabetCase, 
+    includeNumbers, includeSymbols
   ]);
 
 
@@ -580,14 +622,108 @@ const HandwritingWorksheetGenerator = () => {
                 <>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Text to Practice
+                      Worksheet Type
                     </label>
-                    <textarea
-                      value={text}
-                      onChange={(e) => setText(e.target.value)}
-                      placeholder="Enter text for the worksheet..."
-                      className="w-full h-24 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none resize-none text-sm"
-                    />
+                    <select
+                      value={worksheetType}
+                      onChange={(e) => setWorksheetType(e.target.value as any)}
+                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm mb-3"
+                    >
+                      <option value="text">Custom Text</option>
+                      <option value="letters">Specific Letters</option>
+                      <option value="alphabet">Alphabet Practice</option>
+                      <option value="numbers">Numbers & Symbols</option>
+                    </select>
+
+                    {worksheetType === 'text' && (
+                      <textarea
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        placeholder="Enter text for the worksheet..."
+                        className="w-full h-24 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none resize-none text-sm"
+                      />
+                    )}
+
+                    {worksheetType === 'letters' && (
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">
+                          Enter letters to practice (separated by spaces)
+                        </label>
+                        <input
+                          type="text"
+                          value={specificLetters}
+                          onChange={(e) => setSpecificLetters(e.target.value)}
+                          placeholder="Aa Bb Cc Dd"
+                          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+                        />
+                      </div>
+                    )}
+
+                    {worksheetType === 'alphabet' && (
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700">
+                          Letter Case
+                        </label>
+                        <div className="flex gap-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="alphabetCase"
+                              value="uppercase"
+                              checked={alphabetCase === 'uppercase'}
+                              onChange={(e) => setAlphabetCase(e.target.value as any)}
+                              className="text-indigo-600"
+                            />
+                            <span className="text-sm">Uppercase</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="alphabetCase"
+                              value="lowercase"
+                              checked={alphabetCase === 'lowercase'}
+                              onChange={(e) => setAlphabetCase(e.target.value as any)}
+                              className="text-indigo-600"
+                            />
+                            <span className="text-sm">Lowercase</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="alphabetCase"
+                              value="both"
+                              checked={alphabetCase === 'both'}
+                              onChange={(e) => setAlphabetCase(e.target.value as any)}
+                              className="text-indigo-600"
+                            />
+                            <span className="text-sm">Both</span>
+                          </label>
+                        </div>
+                      </div>
+                    )}
+
+                    {worksheetType === 'numbers' && (
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={includeNumbers}
+                            onChange={(e) => setIncludeNumbers(e.target.checked)}
+                            className="w-4 h-4 text-indigo-600 rounded"
+                          />
+                          <span className="text-sm font-semibold">Include Numbers (0-9)</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={includeSymbols}
+                            onChange={(e) => setIncludeSymbols(e.target.checked)}
+                            className="w-4 h-4 text-indigo-600 rounded"
+                          />
+                          <span className="text-sm font-semibold">Include Symbols</span>
+                        </label>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -825,7 +961,7 @@ const HandwritingWorksheetGenerator = () => {
 
               <button
                 onClick={generatePDF}
-                disabled={!text && !emptyPaper}
+                disabled={(!text && worksheetType === 'text' && !emptyPaper) || (worksheetType === 'numbers' && !includeNumbers && !includeSymbols)}
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
               >
                 <Download className="w-5 h-5" />
@@ -846,7 +982,10 @@ const HandwritingWorksheetGenerator = () => {
                     className="text-2xl truncate"
                     style={{ fontFamily: selectedFont }}
                   >
-                    {text || selectedFont}
+                    {worksheetType === 'text' ? (text || selectedFont) : 
+                     worksheetType === 'letters' ? specificLetters :
+                     worksheetType === 'alphabet' ? 'ABC abc' :
+                     '123 !@#'}
                   </p>
                 </div>
               )}
@@ -856,9 +995,9 @@ const HandwritingWorksheetGenerator = () => {
                   ref={canvasRef}
                   className="w-full h-auto"
                 />
-                {!text && !emptyPaper && (
+                {!text && !emptyPaper && worksheetType === 'text' && (
                   <div className="flex items-center justify-center h-64 text-gray-400 text-sm p-4 text-center">
-                    Enter text (or select empty paper mode) to see a preview
+                    {worksheetType === 'text' ? 'Enter text (or select empty paper mode) to see a preview' : 'Select worksheet options to see a preview'}
                   </div>
                 )}
               </div>
