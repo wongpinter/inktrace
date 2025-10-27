@@ -254,37 +254,68 @@ const HandwritingWorksheetGenerator = () => {
       
       ctx.font = `${fontSize}px "${selectedFont}"`;
       
-      const words = text.split(' ');
-      let currentLine = '';
-      let wordIndex = 0;
+      if (repeatText) {
+        // Repeat the entire text to fill the page
+        while (yPosition < contentHeight) {
+          const words = text.split(' ');
+          let currentLine = '';
 
-      while (yPosition < contentHeight) {
-        const word = words[wordIndex % words.length];
-        const testLine = currentLine + (currentLine ? ' ' : '') + word;
-        const metrics = ctx.measureText(testLine);
-        
-        if (metrics.width > contentWidth && currentLine) {
-          // Draw current line and start new one
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
-          yPosition += lineSetHeight;
-          currentLine = '';
-          
-          if (!repeatText) {
-            // Move to next word without repeating
-            wordIndex++;
-            if (wordIndex >= words.length) break;
-          }
-        } else {
-          currentLine = testLine;
-          wordIndex++;
-          
-          // If we've used all words and not repeating, draw final line and stop
-          if (!repeatText && wordIndex >= words.length) {
-            if (currentLine && yPosition < contentHeight) {
+          for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const testLine = currentLine + (currentLine ? ' ' : '') + word;
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > contentWidth && currentLine) {
+              // Draw current line
               drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
+              yPosition += lineSetHeight;
+              
+              // Start new line with current word
+              currentLine = word;
+              
+              // Check if we've run out of space
+              if (yPosition >= contentHeight) break;
+            } else {
+              currentLine = testLine;
             }
+          }
+          
+          // Draw remaining text
+          if (currentLine && yPosition < contentHeight) {
+            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
+            yPosition += lineSetHeight;
+          } else {
             break;
           }
+        }
+      } else {
+        // Draw text once, breaking into lines as needed
+        const words = text.split(' ');
+        let currentLine = '';
+
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i];
+          const testLine = currentLine + (currentLine ? ' ' : '') + word;
+          const metrics = ctx.measureText(testLine);
+          
+          if (metrics.width > contentWidth && currentLine) {
+            // Draw current line
+            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
+            yPosition += lineSetHeight;
+            
+            // Start new line with current word
+            currentLine = word;
+            
+            // Check if we've run out of space
+            if (yPosition >= contentHeight) break;
+          } else {
+            currentLine = testLine;
+          }
+        }
+        
+        // Draw remaining text
+        if (currentLine && yPosition < contentHeight) {
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight);
         }
       }
     }
