@@ -25,11 +25,20 @@ export const FontSelector: React.FC<FontSelectorProps> = ({
   onFontHover
 }) => {
   return (
-    <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
-        Font Category
-      </label>
-      <div className="flex flex-wrap gap-1.5 mb-2">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-soft overflow-hidden">
+      {/* Section Header */}
+      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
+        <div className="p-1.5 bg-white rounded-lg shadow-sm">
+          <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Font</h2>
+      </div>
+
+      {/* Section Content */}
+      <div className="p-4 space-y-3">
+        <div className="flex flex-wrap gap-1.5">
         {Object.keys(CATEGORY_LABELS).map(category => (
           <button
             key={category}
@@ -48,34 +57,35 @@ export const FontSelector: React.FC<FontSelectorProps> = ({
         ))}
       </div>
 
-      <div className="relative mb-2">
-        <Search className="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search fonts..."
-          className="w-full pl-8 pr-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
-        />
-      </div>
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search fonts..."
+            className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none text-sm bg-white transition-smooth"
+          />
+        </div>
 
-      <select
-        value={selectedFont}
-        onChange={(e) => onFontChange(e.target.value)}
-        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
-        size={4}
-      >
-        {filteredFonts.map(font => (
-          <option 
-            key={font} 
-            value={font} 
-            style={{ fontFamily: font, fontSize: '16px', padding: '4px' }}
-            onMouseEnter={() => onFontHover(font)}
-          >
-            {font}
-          </option>
-        ))}
-      </select>
+        <select
+          value={selectedFont}
+          onChange={(e) => onFontChange(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none text-sm bg-white transition-smooth"
+          size={4}
+        >
+          {filteredFonts.map(font => (
+            <option 
+              key={font} 
+              value={font} 
+              style={{ fontFamily: font, fontSize: '16px', padding: '4px' }}
+              onMouseEnter={() => onFontHover(font)}
+            >
+              {font}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };

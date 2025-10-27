@@ -168,7 +168,6 @@ export const drawTracingLine = (
   lineCount: number,
   fontSize: number,
   selectedFont: string,
-  dottedFont: boolean,
   textOpacity: number,
   showGuides: boolean,
   guidelineStyle: GuidelineStyle,
@@ -194,9 +193,8 @@ export const drawTracingLine = (
     if (i === 0) {
       ctx.font = `${fontSize}px "${selectedFont}"`;
       
-      // Use the new trace style system
-      const traceStyleToUse = dottedFont ? textTraceStyle : 'solid';
-      drawTracedText(ctx, text, x, currentBaselineY, textOpacity, traceStyleToUse, letterSpacing, showStartingDots, fontSize);
+      // Use the text trace style
+      drawTracedText(ctx, text, x, currentBaselineY, textOpacity, textTraceStyle, letterSpacing, showStartingDots, fontSize);
     }
   }
 };

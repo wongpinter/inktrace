@@ -35,9 +35,9 @@ const HandwritingWorksheetGenerator = () => {
     (preferences.worksheetType === 'numbers' && !preferences.includeNumbers && !preferences.includeSymbols);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-6">
       <div className="max-w-[1400px] mx-auto">
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-white rounded-2xl shadow-elevated overflow-hidden">
           <WorksheetHeader
             onSave={savePreferences}
             onLoad={loadPreferences}
@@ -47,10 +47,15 @@ const HandwritingWorksheetGenerator = () => {
             isDownloadDisabled={isDownloadDisabled}
           />
 
-          <div className="grid lg:grid-cols-[400px_1fr] gap-0 border-t">
+          <div className="grid lg:grid-cols-[420px_1fr] gap-0 border-t border-gray-100">
             {/* Left Sidebar: All Settings */}
-            <div className="border-r bg-gray-50 p-6 max-h-[calc(100vh-100px)] overflow-y-auto">
-              <div className="space-y-6">
+            <div className="border-r border-gray-100 bg-gradient-to-b from-gray-50 to-white p-6 max-h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <style>{`
+                div::-webkit-scrollbar {
+                  display: none;
+                }
+              `}</style>
+              <div className="space-y-5">
                 <ContentSettings
                   preferences={preferences}
                   updatePreference={updatePreference}
@@ -82,7 +87,7 @@ const HandwritingWorksheetGenerator = () => {
             </div>
 
             {/* Right Side: Preview */}
-            <div className="bg-white p-6">
+            <div className="bg-white p-6 lg:p-8">
               <WorksheetPreview
                 preferences={preferences}
                 fontsLoaded={fontsLoaded}

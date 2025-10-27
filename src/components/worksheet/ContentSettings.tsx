@@ -21,21 +21,26 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
   } = preferences;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 text-indigo-600 font-semibold mb-4">
-        <FileText className="w-5 h-5" />
-        <h2 className="text-base">Content Settings</h2>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-soft overflow-hidden">
+      {/* Section Header */}
+      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
+        <div className="p-1.5 bg-white rounded-lg shadow-sm">
+          <FileText className="w-4 h-4 text-indigo-600" />
+        </div>
+        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Content</h2>
       </div>
 
-      <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+      {/* Section Content */}
+      <div className="p-4 space-y-4">
+        <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
         <input
           type="checkbox"
           id="emptyPaper"
           checked={emptyPaper}
           onChange={(e) => updatePreference('emptyPaper', e.target.checked)}
-          className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+          className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 transition-smooth"
         />
-        <label htmlFor="emptyPaper" className="text-sm font-semibold text-gray-700">
+        <label htmlFor="emptyPaper" className="text-sm font-medium text-gray-700 cursor-pointer">
           Generate Empty Practice Paper
         </label>
       </div>
@@ -49,7 +54,7 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
             <select
               value={worksheetType}
               onChange={(e) => updatePreference('worksheetType', e.target.value as WorksheetType)}
-              className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm mb-3"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none text-sm mb-3 bg-white transition-smooth"
             >
               <option value="text">Custom Text</option>
               <option value="letters">Specific Letters</option>
@@ -62,7 +67,7 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
                 value={text}
                 onChange={(e) => updatePreference('text', e.target.value)}
                 placeholder="Enter text for the worksheet..."
-                className="w-full h-24 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none resize-none text-sm"
+                className="w-full h-24 px-3 py-2 border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none resize-none text-sm bg-white transition-smooth"
               />
             )}
 
@@ -151,19 +156,6 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
-              id="dotted"
-              checked={dottedFont}
-              onChange={(e) => updatePreference('dottedFont', e.target.checked)}
-              className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
-            />
-            <label htmlFor="dotted" className="text-sm font-semibold text-gray-700">
-              Dotted Font (for tracing)
-            </label>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
               id="repeat"
               checked={repeatText}
               onChange={(e) => updatePreference('repeatText', e.target.checked)}
@@ -175,6 +167,7 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
           </div>
         </>
       )}
+      </div>
     </div>
   );
 };

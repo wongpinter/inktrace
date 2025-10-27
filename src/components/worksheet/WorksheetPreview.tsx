@@ -64,14 +64,20 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
   const previewText = getPreviewText();
 
   return (
-    <div className="space-y-4">
-      <label className="block text-lg font-semibold text-indigo-600">
-        Preview
-      </label>
+    <div className="space-y-5">
+      <div className="flex items-center gap-2.5">
+        <div className="p-1.5 bg-indigo-100 rounded-lg">
+          <svg className="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </div>
+        <h2 className="text-base font-bold text-gray-900">Preview</h2>
+      </div>
       
       {!emptyPaper && (
-        <div className="mb-3 p-3 bg-gray-50 rounded-lg">
-          <p className="text-xs font-semibold text-gray-700 mb-1">Selected Font:</p>
+        <div className="mb-4 p-4 bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl border border-gray-100">
+          <p className="text-xs font-medium text-gray-600 mb-2">Selected Font:</p>
           <p 
             className="text-2xl truncate"
             style={{ fontFamily: selectedFont }}
@@ -81,7 +87,7 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
         </div>
       )}
       
-      <div className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white shadow-inner">
+      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-soft">
         <canvas
           ref={canvasRef}
           className="w-full h-auto"
@@ -93,9 +99,9 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
         )}
       </div>
       
-      <div className="p-3 bg-blue-50 rounded-lg">
-        <p className="text-xs text-gray-600">
-          <strong>Tips:</strong><br/>
+      <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+        <p className="text-xs text-gray-700 leading-relaxed">
+          <strong className="text-indigo-700 font-semibold">💡 Tips:</strong><br/>
           • The first line is for tracing; {preferences.lineCount - 1} blank {preferences.lineCount - 1 > 1 ? 'lines' : 'line'} follow{preferences.lineCount - 1 > 1 ? '' : 's'}.<br/>
           • Use 'Dotted Font' for a classic tracing look.<br/>
           • Try rainbow guidelines for colorful practice!<br/>

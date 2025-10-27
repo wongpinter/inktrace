@@ -23,13 +23,18 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
   } = preferences;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 text-indigo-600 font-semibold mb-4">
-        <Settings className="w-5 h-5" />
-        <h2 className="text-base">Worksheet Style</h2>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-soft overflow-hidden">
+      {/* Section Header */}
+      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-200">
+        <div className="p-1.5 bg-white rounded-lg shadow-sm">
+          <Settings className="w-4 h-4 text-green-600" />
+        </div>
+        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Page Setup</h2>
       </div>
 
-      <div>
+      {/* Section Content */}
+      <div className="p-4 space-y-4">
+        <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Paper Size
         </label>
@@ -117,35 +122,39 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          id="guides"
-          checked={showGuides}
-          onChange={(e) => updatePreference('showGuides', e.target.checked)}
-          className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
-        />
-        <label htmlFor="guides" className="text-sm font-semibold text-gray-700">
-          Show Guidelines
-        </label>
-      </div>
+      <div className="space-y-3 p-3 bg-gray-50 rounded-lg">
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            id="guides"
+            checked={showGuides}
+            onChange={(e) => updatePreference('showGuides', e.target.checked)}
+            className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+          />
+          <label htmlFor="guides" className="text-sm font-medium text-gray-700 cursor-pointer">
+            Show Guidelines
+          </label>
+        </div>
 
-      <div className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          id="fullMargin"
-          checked={fullMarginGuides}
-          onChange={(e) => updatePreference('fullMarginGuides', e.target.checked)}
-          className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
-        />
-        <label htmlFor="fullMargin" className="text-sm font-semibold text-gray-700">
-          Full Margin Guidelines
-        </label>
+        {showGuides && (
+          <div className="flex items-center gap-3 pl-7">
+            <input
+              type="checkbox"
+              id="fullMargin"
+              checked={fullMarginGuides}
+              onChange={(e) => updatePreference('fullMarginGuides', e.target.checked)}
+              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+            />
+            <label htmlFor="fullMargin" className="text-sm text-gray-600 cursor-pointer">
+              Extend to margins
+            </label>
+          </div>
+        )}
       </div>
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Text Opacity: {Math.round(textOpacity * 100)}%
+          Tracing Opacity: {Math.round(textOpacity * 100)}%
         </label>
         <input
           type="range"
@@ -156,21 +165,8 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
           onChange={(e) => updatePreference('textOpacity', Number(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
+        <p className="text-xs text-gray-500 mt-1">How visible the tracing text appears</p>
       </div>
-
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Guideline Opacity: {Math.round(guidelineOpacity * 100)}%
-        </label>
-        <input
-          type="range"
-          min="0.1"
-          max="1"
-          step="0.1"
-          value={guidelineOpacity}
-          onChange={(e) => updatePreference('guidelineOpacity', Number(e.target.value))}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-        />
       </div>
     </div>
   );
