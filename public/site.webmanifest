@@ -1,6 +1,7 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "InkTrace - Handwriting Worksheet Generator",
+  "short_name": "InkTrace",
+  "description": "Create custom handwriting practice worksheets with ease",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +16,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
+  "theme_color": "#6366f1",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "/"
 }

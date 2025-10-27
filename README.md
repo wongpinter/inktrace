@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# InkTrace - Handwriting Worksheet Generator
 
-## Project info
+A modern, free web application for creating custom handwriting practice worksheets with beautiful fonts, customizable guidelines, and professional PDF export.
 
-**URL**: https://lovable.dev/projects/99b3a6d5-3bf0-4d5e-904f-a23a28a16055
+## 🌟 Features
 
-## How can I edit this code?
+- **Multi-Page Builder**: Create worksheets with different content on each page
+- **Customizable Fonts**: 100+ Google Fonts including educational handwriting fonts
+- **Flexible Guidelines**: Multiple line styles (elementary, standard, dotted)
+- **Line Customization**: Rainbow guidelines, adjustable spacing, starting dots
+- **Text Trace Styles**: Dotted, dashed, outline, or solid
+- **PDF Export**: High-quality 300 DPI print-ready PDFs
+- **Page Management**: Add, duplicate, reorder, and delete pages
+- **Footer Options**: Customizable branding and pagination
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Modern UI**: Beautiful interface with smooth animations
 
-There are several ways of editing your application.
+## 🚀 Live Demo
 
-**Use Lovable**
+**URL**: https://wongpinter.github.io/inktrace/
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/99b3a6d5-3bf0-4d5e-904f-a23a28a16055) and start prompting.
+## 🛠️ Development
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ and npm
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Local Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# Clone the repository
+git clone git@github.com:wongpinter/inktrace.git
 
-Follow these steps:
+# Navigate to the project directory
+cd inktrace
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build for Production
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Deploy to GitHub Pages
 
-## What technologies are used for this project?
+```bash
+npm run deploy
+```
 
-This project is built with:
+Or push to main branch for automatic deployment via GitHub Actions.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🏗️ Tech Stack
 
-## How can I deploy this project?
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui + Radix UI
+- **PDF Generation**: jsPDF
+- **Fonts**: Google Fonts API
+- **State Management**: React Hooks
+- **Routing**: React Router
+- **Deployment**: GitHub Pages
 
-Simply open [Lovable](https://lovable.dev/projects/99b3a6d5-3bf0-4d5e-904f-a23a28a16055) and click on Share -> Publish.
+## 📝 License
 
-## Can I connect a custom domain to my Lovable project?
+MIT License - feel free to use this project for personal or commercial purposes.
 
-Yes, you can!
+## 🤝 Contributing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 📧 Contact
+
+Created by [@wongpinter](https://github.com/wongpinter)
+
+## 🙏 Acknowledgments
+
+- Google Fonts for the extensive font library
+- shadcn/ui for the beautiful component system
+- The open-source community

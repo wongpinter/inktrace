@@ -25,7 +25,7 @@ export const WorksheetHeader: React.FC<WorksheetHeaderProps> = ({
           <Type className="w-7 h-7 text-indigo-600" />
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-          Handwriting Worksheet Generator
+          InkTrace
         </h1>
       </div>
       <div className="flex items-center gap-2 flex-wrap">
