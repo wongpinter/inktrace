@@ -24,13 +24,7 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
   } = preferences;
 
   return (
-    <CollapsibleSection
-      title="Page Setup"
-      icon={<Settings className="w-4 h-4" />}
-      gradient="bg-gradient-to-r from-green-50 to-emerald-50"
-      iconColor="text-green-600"
-      defaultOpen={true}
-    >
+    <div className="space-y-4">
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Paper Size
@@ -183,19 +177,13 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
           </div>
         </div>
       </div>
-    </CollapsibleSection>
+    </div>
   );
 };
 
 export const TextFormattingSettings: React.FC<PageSettingsProps> = ({ preferences, updatePreference }) => {
   return (
-    <CollapsibleSection
-      title="Text Formatting"
-      icon={<Type className="w-4 h-4" />}
-      gradient="bg-gradient-to-r from-purple-50 to-pink-50"
-      iconColor="text-purple-600"
-      defaultOpen={false}
-    >
+    <div className="space-y-4">
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Word Spacing: {preferences.wordSpacing}px
@@ -256,6 +244,6 @@ export const TextFormattingSettings: React.FC<PageSettingsProps> = ({ preference
           <option value="titlecase">Title Case</option>
         </select>
       </div>
-    </CollapsibleSection>
+    </div>
   );
 };

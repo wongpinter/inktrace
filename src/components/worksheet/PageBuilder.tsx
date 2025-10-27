@@ -1,7 +1,6 @@
 import React from 'react';
-import { Plus, Trash2, Copy, GripVertical, FileText } from 'lucide-react';
+import { Plus, Trash2, Copy, GripVertical } from 'lucide-react';
 import { PageConfig, WorksheetType, AlphabetCase, WorksheetPreferences } from '@/types/worksheet';
-import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
 
 interface PageBuilderProps {
   preferences: WorksheetPreferences;
@@ -81,13 +80,7 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePre
   };
 
   return (
-    <CollapsibleSection
-      title="Multi-Page Builder"
-      icon={<FileText className="w-4 h-4" />}
-      gradient="bg-gradient-to-r from-violet-50 to-fuchsia-50"
-      iconColor="text-violet-600"
-      defaultOpen={multiPageMode}
-    >
+    <div className="space-y-4">
       <div className="space-y-4">
         {/* Toggle Multi-Page Mode */}
         <div className="flex items-center gap-3 p-3 bg-violet-50 rounded-lg border border-violet-100">
@@ -251,6 +244,6 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePre
           </>
         )}
       </div>
-    </CollapsibleSection>
+    </div>
   );
 };

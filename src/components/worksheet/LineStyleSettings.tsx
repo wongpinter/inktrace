@@ -1,8 +1,6 @@
 import React from 'react';
-import { Palette } from 'lucide-react';
 import { WorksheetPreferences, GuidelineColorStyle, TextTraceStyle } from '@/types/worksheet';
 import { GUIDELINE_COLOR_STYLES, TEXT_TRACE_STYLES } from '@/constants/worksheet';
-import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
 
 interface LineStyleSettingsProps {
   preferences: WorksheetPreferences;
@@ -19,13 +17,7 @@ export const LineStyleSettings: React.FC<LineStyleSettingsProps> = ({ preference
   } = preferences;
 
   return (
-    <CollapsibleSection
-      title="Line Styles"
-      icon={<Palette className="w-4 h-4" />}
-      gradient="bg-gradient-to-r from-orange-50 to-amber-50"
-      iconColor="text-orange-600"
-      defaultOpen={false}
-    >
+    <div className="space-y-4">
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-gray-700">
           Guideline Color Style
@@ -87,6 +79,6 @@ export const LineStyleSettings: React.FC<LineStyleSettingsProps> = ({ preference
           <span className="block text-xs font-normal text-gray-500 leading-relaxed mt-0.5">Red dots indicate where to start writing</span>
         </label>
       </div>
-    </CollapsibleSection>
+    </div>
   );
 };
