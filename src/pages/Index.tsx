@@ -5,7 +5,7 @@ import { generatePDF } from '@/utils/pdfGenerator';
 import { WorksheetHeader } from '@/components/worksheet/WorksheetHeader';
 import { ContentSettings } from '@/components/worksheet/ContentSettings';
 import { FontSelector } from '@/components/worksheet/FontSelector';
-import { PageSettings } from '@/components/worksheet/PageSettings';
+import { PageSettings, TextFormattingSettings } from '@/components/worksheet/PageSettings';
 import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
 import { LineStyleSettings } from '@/components/worksheet/LineStyleSettings';
 import { PageBuilder } from '@/components/worksheet/PageBuilder';
@@ -67,9 +67,19 @@ const HandwritingWorksheetGenerator = () => {
         totalPages={preferences.multiPageMode ? preferences.pages.length : preferences.pageCount}
       />
       
+      <style>{`
+        .settings-sidebar::-webkit-scrollbar {
+          display: none;
+        }
+        .settings-sidebar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+      
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-6">
         <div className="max-w-[1400px] mx-auto">
-        <div className="bg-white rounded-2xl shadow-elevated overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-elevated overflow-visible">
           <WorksheetHeader
             onSave={savePreferences}
             onLoad={loadPreferences}
@@ -79,16 +89,11 @@ const HandwritingWorksheetGenerator = () => {
             isDownloadDisabled={isDownloadDisabled}
           />
 
-          <div className="grid lg:grid-cols-[420px_1fr] gap-0 border-t border-gray-100">
+          <div className="grid lg:grid-cols-[420px_1fr] gap-0 border-t border-gray-100 lg:h-[calc(100vh-180px)]">
             {/* Left Sidebar: All Settings */}
-            <div className="relative border-r border-gray-100 bg-gradient-to-b from-gray-50 to-white">
-              <div className="p-6 max-h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <style>{`
-                  div::-webkit-scrollbar {
-                    display: none;
-                  }
-                `}</style>
-                <div className="space-y-5 pb-8">
+            <div className="border-r border-gray-100 bg-gradient-to-b from-gray-50 to-white lg:h-full lg:overflow-hidden">
+              <div className="settings-sidebar h-full overflow-y-auto overflow-x-hidden px-6 py-6">
+                <div className="space-y-5 pb-6">
                 <PageBuilder
                   preferences={preferences}
                   updatePreference={updatePreference}
@@ -119,15 +124,17 @@ const HandwritingWorksheetGenerator = () => {
                   updatePreference={updatePreference}
                 />
 
+                <TextFormattingSettings
+                  preferences={preferences}
+                  updatePreference={updatePreference}
+                />
+
                 <LineStyleSettings
                   preferences={preferences}
                   updatePreference={updatePreference}
                 />
               </div>
               </div>
-              
-              {/* Scroll fade indicator at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-gray-50 to-transparent pointer-events-none z-10"></div>
             </div>
 
             {/* Right Side: Preview */}

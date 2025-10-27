@@ -1,6 +1,6 @@
 import React from 'react';
-import { Settings } from 'lucide-react';
-import { WorksheetPreferences, PaperSize, GuidelineStyle } from '@/types/worksheet';
+import { Settings, Type } from 'lucide-react';
+import { WorksheetPreferences, PaperSize, GuidelineStyle, CharacterWidth, VerticalAlignment, TextCase } from '@/types/worksheet';
 import { PAPER_SIZES, GUIDELINE_STYLES } from '@/constants/worksheet';
 import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
 
@@ -182,6 +182,79 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
             </label>
           </div>
         </div>
+      </div>
+    </CollapsibleSection>
+  );
+};
+
+export const TextFormattingSettings: React.FC<PageSettingsProps> = ({ preferences, updatePreference }) => {
+  return (
+    <CollapsibleSection
+      title="Text Formatting"
+      icon={<Type className="w-4 h-4" />}
+      gradient="bg-gradient-to-r from-purple-50 to-pink-50"
+      iconColor="text-purple-600"
+      defaultOpen={false}
+    >
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Word Spacing: {preferences.wordSpacing}px
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="20"
+          step="1"
+          value={preferences.wordSpacing}
+          onChange={(e) => updatePreference('wordSpacing', Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Character Width
+        </label>
+        <select
+          value={preferences.characterWidth}
+          onChange={(e) => updatePreference('characterWidth', e.target.value as CharacterWidth)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          <option value="condensed">Condensed</option>
+          <option value="normal">Normal</option>
+          <option value="expanded">Expanded</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Vertical Alignment
+        </label>
+        <select
+          value={preferences.verticalAlignment}
+          onChange={(e) => updatePreference('verticalAlignment', e.target.value as VerticalAlignment)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          <option value="top">Top</option>
+          <option value="center">Center</option>
+          <option value="baseline">Baseline</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Text Case
+        </label>
+        <select
+          value={preferences.textCase}
+          onChange={(e) => updatePreference('textCase', e.target.value as TextCase)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          <option value="none">None (Original)</option>
+          <option value="uppercase">UPPERCASE</option>
+          <option value="lowercase">lowercase</option>
+          <option value="titlecase">Title Case</option>
+        </select>
       </div>
     </CollapsibleSection>
   );

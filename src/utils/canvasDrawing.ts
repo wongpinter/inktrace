@@ -177,10 +177,13 @@ export const drawTracingLine = (
   guidelineColorStyle: GuidelineColorStyle,
   textTraceStyle: TextTraceStyle,
   letterSpacing: number,
-  showStartingDots: boolean
+  showStartingDots: boolean,
+  wordSpacing: number = 0,
+  characterWidthScale: number = 1.0,
+  verticalOffset: number = 0
 ) => {
   const guidelineTopY = y - fontSize * TOP_LINE_RATIO;
-  const baselineY = guidelineTopY + (fontSize * BASELINE_RATIO);
+  const baselineY = guidelineTopY + (fontSize * BASELINE_RATIO) + verticalOffset;
   
   for (let i = 0; i < lineCount; i++) {
     const currentTopY = guidelineTopY + (i * lineHeight);
@@ -191,10 +194,36 @@ export const drawTracingLine = (
     }
     
     if (i === 0) {
+      ctx.save();
+      
+      // Apply character width scaling
+      if (characterWidthScale !== 1.0) {
+        ctx.scale(characterWidthScale, 1);
+      }
+      
       ctx.font = `${fontSize}px "${selectedFont}"`;
       
-      // Use the text trace style
-      drawTracedText(ctx, text, x, currentBaselineY, textOpacity, textTraceStyle, letterSpacing, showStartingDots, fontSize);
+      // Apply word spacing if needed
+      let adjustedX = characterWidthScale !== 1.0 ? x / characterWidthScale : x;
+      
+      if (wordSpacing > 0) {
+        // Draw text with custom word spacing
+        const words = text.split(' ');
+        let currentX = adjustedX;
+        
+        for (let w = 0; w < words.length; w++) {
+          const word = words[w];
+          drawTracedText(ctx, word, currentX, currentBaselineY, textOpacity, textTraceStyle, letterSpacing, showStartingDots, fontSize);
+          
+          const wordWidth = ctx.measureText(word).width;
+          currentX += wordWidth + wordSpacing;
+        }
+      } else {
+        // Draw text normally
+        drawTracedText(ctx, text, adjustedX, currentBaselineY, textOpacity, textTraceStyle, letterSpacing, showStartingDots, fontSize);
+      }
+      
+      ctx.restore();
     }
   }
 };

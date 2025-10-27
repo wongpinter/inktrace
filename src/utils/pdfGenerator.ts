@@ -3,6 +3,7 @@ import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LI
 import { WorksheetPreferences } from '@/types/worksheet';
 import { drawGuidelines, drawTracingLine } from './canvasDrawing';
 import { getWorksheetContent } from './worksheetContent';
+import { transformTextCase, getCharacterWidthScale, getVerticalOffset } from './textFormatting';
 
 export const drawPage = (
   ctx: CanvasRenderingContext2D,
@@ -36,7 +37,11 @@ export const drawPage = (
     showStartingDots,
     showPageNumbers,
     showFooter,
-    footerText
+    footerText,
+    wordSpacing,
+    characterWidth,
+    verticalAlignment,
+    textCase
   } = preferences;
 
   ctx.fillStyle = '#ffffff';
@@ -55,6 +60,8 @@ export const drawPage = (
     ctx.fillText(`${footerText} (https://inktrace.wongpinter.com)`, margin, headerY);
   }
   
+  const lineHeight = fontSize * LINE_HEIGHT_MULTIPLIER;
+  
   let yPosition = margin + fontSize;
 
   if (emptyPaper) {
@@ -67,12 +74,16 @@ export const drawPage = (
       yPosition += lineSetHeight;
     }
   } else {
-    const lineHeight = fontSize * LINE_HEIGHT_MULTIPLIER;
     const lineSetHeight = (lineHeight * (lineCount - 1)) + (fontSize * LINE_SET_HEIGHT_MULTIPLIER);
+    
+    // Calculate text formatting values
+    const characterWidthScale = getCharacterWidthScale(characterWidth);
+    const verticalOffset = getVerticalOffset(verticalAlignment, fontSize, lineHeight);
     
     ctx.font = `${fontSize}px "${selectedFont}"`;
     
-    const contentToDisplay = getWorksheetContent(
+    // Apply text case transformation
+    let contentToDisplay = getWorksheetContent(
       worksheetType,
       text,
       specificLetters,
@@ -80,6 +91,7 @@ export const drawPage = (
       includeNumbers,
       includeSymbols
     );
+    contentToDisplay = transformTextCase(contentToDisplay, textCase);
     
     if (repeatText) {
       while (yPosition < contentHeight) {
@@ -92,7 +104,7 @@ export const drawPage = (
           const metrics = ctx.measureText(testLine);
           
           if (metrics.width > contentWidth && currentLine) {
-            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
+            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset);
             yPosition += lineSetHeight;
             currentLine = word;
             
@@ -103,7 +115,7 @@ export const drawPage = (
         }
         
         if (currentLine && yPosition < contentHeight) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset);
           yPosition += lineSetHeight;
         } else {
           break;
@@ -119,7 +131,7 @@ export const drawPage = (
         const metrics = ctx.measureText(testLine);
         
         if (metrics.width > contentWidth && currentLine) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset);
           yPosition += lineSetHeight;
           currentLine = word;
           
@@ -130,7 +142,7 @@ export const drawPage = (
       }
       
       if (currentLine && yPosition < contentHeight) {
-        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
+        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots, wordSpacing, characterWidthScale, verticalOffset);
       }
     }
   }
