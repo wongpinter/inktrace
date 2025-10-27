@@ -7,6 +7,38 @@ interface LineSpacingSettingsProps {
   updatePreference: <K extends keyof WorksheetPreferences>(key: K, value: WorksheetPreferences[K]) => void;
 }
 
+// Visual preview component for line spacing
+const SpacingPreview: React.FC<{ spacingMm: number; label: string; isActive: boolean }> = ({ 
+  spacingMm, 
+  label, 
+  isActive 
+}) => {
+  // Scale down for preview (1mm = 2px in preview)
+  const previewHeight = spacingMm * 2;
+  const maxHeight = 50; // Maximum preview height
+  const scaledHeight = Math.min(previewHeight, maxHeight);
+  
+  return (
+    <div className={`flex flex-col items-center p-2 rounded-lg transition-all ${
+      isActive ? 'bg-indigo-50 border-2 border-indigo-300' : 'bg-gray-50 border border-gray-200'
+    }`}>
+      <div className="text-xs font-medium text-gray-700 mb-1">{label}</div>
+      <div className="relative" style={{ height: `${scaledHeight}px`, width: '60px' }}>
+        {/* Baseline */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400"></div>
+        {/* Top line */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gray-400"></div>
+        {/* Sample letter 'a' */}
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-400 font-serif" 
+             style={{ fontSize: `${scaledHeight * 0.6}px`, lineHeight: `${scaledHeight}px` }}>
+          a
+        </div>
+      </div>
+      <div className="text-xs text-gray-500 mt-1">{spacingMm}mm</div>
+    </div>
+  );
+};
+
 export const LineSpacingSettings: React.FC<LineSpacingSettingsProps> = ({ 
   preferences, 
   updatePreference 
@@ -70,6 +102,42 @@ export const LineSpacingSettings: React.FC<LineSpacingSettingsProps> = ({
           </div>
         </div>
       )}
+
+      {/* Visual Spacing Comparison */}
+      <div className="p-3 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg border border-indigo-200">
+        <h4 className="text-xs font-semibold text-indigo-900 mb-3">Visual Spacing Comparison</h4>
+        <div className="grid grid-cols-3 gap-2">
+          <SpacingPreview 
+            spacingMm={19} 
+            label="K" 
+            isActive={preferences.lineSpacingPreset === 'kindergarten'} 
+          />
+          <SpacingPreview 
+            spacingMm={12.7} 
+            label="1-3" 
+            isActive={preferences.lineSpacingPreset === 'grade1-3'} 
+          />
+          <SpacingPreview 
+            spacingMm={8.7} 
+            label="4-6" 
+            isActive={preferences.lineSpacingPreset === 'grade4-6' || preferences.lineSpacingPreset === 'wide-ruled'} 
+          />
+        </div>
+        <div className="grid grid-cols-3 gap-2 mt-2">
+          <SpacingPreview 
+            spacingMm={6.4} 
+            label="7+" 
+            isActive={preferences.lineSpacingPreset === 'narrow-ruled'} 
+          />
+          {isCustom && (
+            <SpacingPreview 
+              spacingMm={preferences.customLineSpacing} 
+              label="Custom" 
+              isActive={true} 
+            />
+          )}
+        </div>
+      </div>
 
       <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
         <h4 className="text-xs font-semibold text-blue-900 mb-2">Educational Standards</h4>

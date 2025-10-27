@@ -389,27 +389,29 @@ export const drawWorksheetHeader = (
   // Right side: Font information
   ctx.textAlign = 'right';
   
-  // "Font:" label (light gray, smaller)
-  ctx.font = '10px Arial, sans-serif';
-  ctx.fillStyle = 'rgba(120, 120, 120, 0.8)';
-  const fontLabelWidth = ctx.measureText('Font:').width;
-  ctx.fillText('Font:', width - margin - 5, headerY);
-  
-  // Font name (darker, slightly larger)
-  ctx.font = '11px Arial, sans-serif';
-  ctx.fillStyle = 'rgba(60, 60, 60, 0.9)';
-  
   // Truncate font name if too long
   let displayFont = fontName;
   const maxWidth = 150;
-  if (ctx.measureText(displayFont).width > maxWidth) {
-    while (ctx.measureText(displayFont + '...').width > maxWidth && displayFont.length > 0) {
+  
+  // Measure with "Font: " prefix
+  ctx.font = '11px Arial, sans-serif';
+  const fullText = `${displayFont}  Font:`;
+  if (ctx.measureText(fullText).width > maxWidth + 40) {
+    while (ctx.measureText(`${displayFont}...  Font:`).width > maxWidth + 40 && displayFont.length > 0) {
       displayFont = displayFont.slice(0, -1);
     }
     displayFont += '...';
   }
   
-  ctx.fillText(displayFont, width - margin - fontLabelWidth - 10, headerY);
+  // Draw font name (darker, slightly larger)
+  ctx.fillStyle = 'rgba(60, 60, 60, 0.9)';
+  ctx.fillText(displayFont, width - margin, headerY);
+  
+  // Draw "Font:" label after font name (light gray, smaller)
+  const fontNameWidth = ctx.measureText(displayFont).width;
+  ctx.font = '10px Arial, sans-serif';
+  ctx.fillStyle = 'rgba(120, 120, 120, 0.8)';
+  ctx.fillText('Font:', width - margin - fontNameWidth - 8, headerY);
   
   ctx.restore();
 };
