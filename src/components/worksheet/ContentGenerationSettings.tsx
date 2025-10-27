@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { WorksheetPreferences, SightWordList, WordPattern, DifficultyLevel } from '@/types/worksheet';
-import { DOLCH_SIGHT_WORDS, FRY_SIGHT_WORDS, WORD_PATTERNS, SENTENCE_TEMPLATES, TEMPLATE_WORDS, COMMON_NAMES, DIFFICULTY_LEVELS } from '@/constants/contentGeneration';
+import { DOLCH_SIGHT_WORDS, FRY_SIGHT_WORDS, WORD_PATTERNS, SENTENCE_TEMPLATES, TEMPLATE_WORDS, COMMON_NAMES, DIFFICULTY_LEVELS, ARABIC_LETTERS, ARABIC_WORDS, ARABIC_SENTENCES, ARABIC_TEMPLATE_WORDS } from '@/constants/contentGeneration';
 import { exportWordList, importWordList } from '@/utils/contentGeneration';
-import { Sparkles, List, FileText, User, Shuffle, Download, Upload } from 'lucide-react';
+import { Sparkles, List, FileText, User, Shuffle, Download, Upload, Languages } from 'lucide-react';
 
 interface ContentGenerationSettingsProps {
   preferences: WorksheetPreferences;
@@ -13,7 +13,7 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
   preferences, 
   updatePreference 
 }) => {
-  const [activeTab, setActiveTab] = useState<'sightwords' | 'patterns' | 'sentences' | 'names' | 'custom' | 'random'>('sightwords');
+  const [activeTab, setActiveTab] = useState<'sightwords' | 'patterns' | 'sentences' | 'names' | 'custom' | 'random' | 'arabic'>('sightwords');
   const [customWordInput, setCustomWordInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,6 +99,32 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
     
     updatePreference('text', selected.join(' '));
     updateContentGeneration({ randomWordDifficulty: difficulty, randomWordCount: count });
+  };
+
+  const generateArabicLetters = (withNames: boolean = false) => {
+    const letters = withNames ? ARABIC_LETTERS.withNames : ARABIC_LETTERS.alphabet;
+    updatePreference('text', letters.join(' '));
+  };
+
+  const generateArabicWords = (category: keyof typeof ARABIC_WORDS) => {
+    const words = ARABIC_WORDS[category];
+    updatePreference('text', words.join(' '));
+  };
+
+  const generateArabicSentences = (template: string) => {
+    const sentences: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      let sentence = template;
+      Object.entries(ARABIC_TEMPLATE_WORDS).forEach(([key, words]) => {
+        const placeholder = `{${key}}`;
+        if (sentence.includes(placeholder)) {
+          const randomWord = words[Math.floor(Math.random() * words.length)];
+          sentence = sentence.replace(placeholder, randomWord);
+        }
+      });
+      sentences.push(sentence);
+    }
+    updatePreference('text', sentences.join(' '));
   };
 
   const handleExportWords = () => {
@@ -197,6 +223,17 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
         >
           <Shuffle className="w-3 h-3 inline mr-1" />
           Random
+        </button>
+        <button
+          onClick={() => setActiveTab('arabic')}
+          className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+            activeTab === 'arabic' 
+              ? 'bg-indigo-100 text-indigo-700' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          <Languages className="w-3 h-3 inline mr-1" />
+          Arabic
         </button>
       </div>
 
@@ -454,6 +491,97 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
                 onChange={(e) => updateContentGeneration({ randomWordCount: Number(e.target.value) })}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
               />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'arabic' && (
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-gray-700">Arabic Letters & Words</h3>
+            
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-gray-600">Alphabet</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => generateArabicLetters(false)}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors text-left"
+                >
+                  <div className="font-medium">Letters Only</div>
+                  <div className="text-gray-500 text-lg" dir="rtl">ا ب ت ث...</div>
+                </button>
+                <button
+                  onClick={() => generateArabicLetters(true)}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors text-left"
+                >
+                  <div className="font-medium">With Names</div>
+                  <div className="text-gray-500" dir="rtl">ا (ألف)...</div>
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-gray-600">Word Categories</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => generateArabicWords('basic')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Basic Words</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">بيت كتاب قلم</div>
+                </button>
+                <button
+                  onClick={() => generateArabicWords('colors')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Colors</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">أحمر أزرق</div>
+                </button>
+                <button
+                  onClick={() => generateArabicWords('numbers')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Numbers</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">واحد اثنان</div>
+                </button>
+                <button
+                  onClick={() => generateArabicWords('family')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Family</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">أب أم أخ</div>
+                </button>
+                <button
+                  onClick={() => generateArabicWords('body')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Body Parts</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">رأس عين يد</div>
+                </button>
+                <button
+                  onClick={() => generateArabicWords('food')}
+                  className="px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                >
+                  <div className="font-medium">Food</div>
+                  <div className="text-gray-500 text-sm" dir="rtl">خبز تفاح</div>
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-gray-600">Sentence Templates</h4>
+              <p className="text-xs text-gray-500">Click to generate 5 random sentences</p>
+              <div className="space-y-2">
+                {ARABIC_SENTENCES.map((template, index) => (
+                  <button
+                    key={index}
+                    onClick={() => generateArabicSentences(template)}
+                    className="w-full px-3 py-2 text-xs bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-colors text-right"
+                    dir="rtl"
+                  >
+                    {template}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}

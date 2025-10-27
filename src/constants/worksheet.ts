@@ -64,6 +64,13 @@ export const GOOGLE_FONTS = {
     'Roboto Mono', 'Source Code Pro', 'Courier Prime', 'Space Mono',
     'IBM Plex Mono', 'Inconsolata', 'Ubuntu Mono', 'Fira Mono',
     'PT Mono', 'Overpass Mono', 'Anonymous Pro', 'VT323'
+  ],
+  arabic: [
+    'Noto Sans Arabic', 'Noto Kufi Arabic', 'Noto Naskh Arabic',
+    'Cairo', 'Amiri', 'Tajawal', 'Almarai', 'Harmattan',
+    'Lateef', 'Scheherazade New', 'Markazi Text', 'Lalezar',
+    'Reem Kufi', 'Mada', 'El Messiri', 'Changa', 'Aref Ruqaa',
+    'Rakkas', 'Katibeh', 'Mirza', 'Jomhuria', 'Vibes'
   ]
 };
 
@@ -75,7 +82,8 @@ export const CATEGORY_LABELS: Record<FontCategory, string> = {
   display: 'Display',
   serif: 'Serif',
   sansSerif: 'Sans Serif',
-  monospace: 'Monospace'
+  monospace: 'Monospace',
+  arabic: 'Arabic'
 };
 
 export const GUIDELINE_COLOR_STYLES = {

@@ -6,9 +6,10 @@ A modern, free web application for creating custom handwriting practice workshee
 
 ### Core Functionality
 - **Multi-Page Builder**: Create worksheets with different content on each page
-- **Customizable Fonts**: 100+ Google Fonts including educational handwriting fonts
+- **Customizable Fonts**: 120+ Google Fonts including educational handwriting fonts and Arabic fonts
 - **Multiple Worksheet Types**: Text practice, specific letters, full alphabet, or numbers
 - **Content Generation**: Smart tools to generate educational content automatically
+- **Arabic Language Support**: Complete Arabic alphabet, words, and 22 Arabic fonts
 - **PDF Export**: High-quality 300 DPI print-ready PDFs
 
 ### Content Generation Tools
@@ -18,6 +19,17 @@ A modern, free web application for creating custom handwriting practice workshee
 - **Name Practice**: Dedicated mode for practicing student names
 - **Custom Word Lists**: Import/export your own word lists
 - **Random Generator**: Create random word sets by difficulty level
+
+### Arabic Language Support
+- **Arabic Alphabet**: All 28 letters with optional names (ا ألف, ب باء, etc.)
+- **Arabic Words**: 180+ words across 6 categories (Basic, Colors, Numbers, Family, Body, Food)
+- **Arabic Sentences**: 8 sentence templates with random word generation
+- **Arabic Fonts**: 22 beautiful Arabic fonts from Google Fonts including:
+  - Noto Sans Arabic, Noto Kufi Arabic, Noto Naskh Arabic
+  - Cairo, Amiri, Tajawal, Almarai, Harmattan
+  - Lateef, Scheherazade New, Markazi Text, Lalezar
+  - Reem Kufi, Mada, El Messiri, Changa, Aref Ruqaa
+  - And more traditional and modern Arabic typefaces
 
 ### Customization Options
 - **Flexible Guidelines**: Multiple line styles (elementary, standard, dotted, double)
