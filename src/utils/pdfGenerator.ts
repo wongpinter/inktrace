@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LINE_RATIO, BASELINE_RATIO, LINE_SPACING_PRESETS, mmToPixels, PRINT_QUALITY_SETTINGS } from '@/constants/worksheet';
 import { WorksheetPreferences } from '@/types/worksheet';
-import { drawGuidelines, drawTracingLine, drawMarginLines } from './canvasDrawing';
+import { drawGuidelines, drawTracingLine, drawMarginLines, drawWorksheetHeader } from './canvasDrawing';
 import { getWorksheetContent } from './worksheetContent';
 import { transformTextCase, getCharacterWidthScale, getVerticalOffset } from './textFormatting';
 
@@ -102,13 +102,10 @@ export const drawPage = (
   const contentWidth = width - (margin * 2);
   const contentHeight = height - margin;
 
-  // Draw header with branding
-  if (showFooter && footerText) {
-    const headerY = 15;
-    ctx.font = '10px Arial, sans-serif';
-    ctx.fillStyle = 'rgba(100, 100, 100, 0.6)';
-    ctx.textAlign = 'left';
-    ctx.fillText(`${footerText} (https://inktrace.wongpinter.com)`, margin, headerY);
+  // Draw beautiful informative header
+  const headerHeight = 35;
+  if (showFooter) {
+    drawWorksheetHeader(ctx, width, margin, selectedFont, true);
   }
 
   // Use preset-based line spacing or fall back to multiplier
@@ -119,7 +116,9 @@ export const drawPage = (
     drawMarginLines(ctx, margin, margin, contentWidth, contentHeight - margin, guidelineThickness);
   }
 
-  let yPosition = margin + fontSize;
+  // Start content below header
+  const topMargin = showFooter ? headerHeight + 15 : margin;
+  let yPosition = topMargin + fontSize;
 
   if (emptyPaper) {
     // Use the same line spacing for empty paper

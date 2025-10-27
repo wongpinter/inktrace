@@ -90,29 +90,29 @@ export const PAPER_SIZES: Record<string, PaperSizeConfig> = {
 };
 
 export const GUIDELINE_STYLES: Record<string, GuidelineStyleConfig> = {
-  standard: { 
-    label: 'Standard (3 lines)', 
-    lines: 3, 
-    dottedMiddle: false 
+  standard: {
+    label: 'Standard (3 lines)',
+    lines: 3,
+    dottedMiddle: false
   },
-  elementary: { 
-    label: 'Elementary (4 lines)', 
-    lines: 4, 
+  elementary: {
+    label: 'Elementary (4 lines)',
+    lines: 4,
     dottedMiddle: false,
     useEducationalProportions: true,
     showDescenderSpace: true
   },
-  dotted: { 
-    label: 'Dotted Midline (4 lines)', 
-    lines: 4, 
+  dotted: {
+    label: 'Dotted Midline (4 lines)',
+    lines: 4,
     dottedMiddle: true,
     useEducationalProportions: true,
     showDescenderSpace: true
   },
-  double: { 
-    label: 'Two-Line System (2 lines)', 
-    lines: 2, 
-    dottedMiddle: false 
+  double: {
+    label: 'Two-Line System (2 lines)',
+    lines: 2,
+    dottedMiddle: false
   }
 };
 
@@ -245,11 +245,11 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   characterWidth: 'normal',
   verticalAlignment: 'baseline',
   textCase: 'none',
-  
+
   // Line spacing
   lineSpacingPreset: 'grade1-3',
   customLineSpacing: 12.7,
-  
+
   // Print quality
   printQuality: 'high',
 
