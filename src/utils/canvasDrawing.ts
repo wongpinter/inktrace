@@ -349,7 +349,7 @@ export const drawTracingLine = (
 
 
 /**
- * Draw a beautiful informative header for the worksheet
+ * Draw a clean informative header for the worksheet (matching reference design)
  */
 export const drawWorksheetHeader = (
   ctx: CanvasRenderingContext2D,
@@ -360,97 +360,56 @@ export const drawWorksheetHeader = (
 ) => {
   if (!showBranding) return;
 
-  const headerHeight = 35;
-  const headerY = 10;
+  const headerY = 18;
   
   ctx.save();
   
-  // Draw subtle gradient background
-  const gradient = ctx.createLinearGradient(0, 0, 0, headerHeight);
-  gradient.addColorStop(0, 'rgba(99, 102, 241, 0.04)');
-  gradient.addColorStop(1, 'rgba(99, 102, 241, 0.01)');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, width, headerHeight);
-  
-  // Draw elegant bottom border with gradient
-  const borderGradient = ctx.createLinearGradient(0, headerHeight, width, headerHeight);
-  borderGradient.addColorStop(0, 'rgba(99, 102, 241, 0.1)');
-  borderGradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.25)');
-  borderGradient.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
-  ctx.strokeStyle = borderGradient;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(0, headerHeight);
-  ctx.lineTo(width, headerHeight);
-  ctx.stroke();
-  
-  // Left side: Logo and Brand
+  // Left side: URL (small, light gray)
   const leftX = margin;
-  let currentX = leftX;
+  ctx.font = '9px Arial, sans-serif';
+  ctx.fillStyle = 'rgba(150, 150, 150, 0.8)';
+  ctx.textAlign = 'left';
+  ctx.fillText('inktrace.wongpinter.com', leftX, headerY);
   
-  // Draw pen icon with shadow
-  ctx.shadowColor = 'rgba(99, 102, 241, 0.3)';
-  ctx.shadowBlur = 3;
-  ctx.shadowOffsetX = 1;
-  ctx.shadowOffsetY = 1;
-  ctx.font = '20px Arial, sans-serif';
+  // Center: Logo and Brand
+  const centerX = width / 2;
+  
+  // Draw pen icon (blue/indigo)
+  ctx.font = '18px Arial, sans-serif';
   ctx.fillStyle = 'rgba(99, 102, 241, 1)';
-  ctx.textAlign = 'left';
-  ctx.fillText('✎', currentX, headerY + 16);
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
-  currentX += 28;
+  ctx.textAlign = 'center';
+  const iconOffset = -45;
+  ctx.fillText('✎', centerX + iconOffset, headerY);
   
-  // Brand name with bold monospace
-  ctx.font = 'bold 15px "Courier New", Courier, monospace';
-  ctx.fillStyle = 'rgba(30, 30, 30, 0.95)';
-  ctx.fillText('InkTrace', currentX, headerY + 15);
-  currentX += ctx.measureText('InkTrace').width + 10;
+  // Brand name (clean sans-serif, bold)
+  ctx.font = 'bold 16px Arial, Helvetica, sans-serif';
+  ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
+  ctx.fillText('InkTrace', centerX, headerY);
   
-  // Separator
-  ctx.fillStyle = 'rgba(150, 150, 150, 0.4)';
-  ctx.fillText('|', currentX, headerY + 15);
-  currentX += 15;
+  // Right side: Font information
+  ctx.textAlign = 'right';
   
-  // URL with monospace
-  ctx.font = '10px "Courier New", Courier, monospace';
-  ctx.fillStyle = 'rgba(100, 100, 100, 0.75)';
-  ctx.fillText('inktrace.wongpinter.com', currentX, headerY + 15);
+  // "Font:" label (light gray, smaller)
+  ctx.font = '10px Arial, sans-serif';
+  ctx.fillStyle = 'rgba(120, 120, 120, 0.8)';
+  const fontLabelWidth = ctx.measureText('Font:').width;
+  ctx.fillText('Font:', width - margin - 5, headerY);
   
-  // Right side: Font information box
-  const rightX = width - margin;
-  const boxWidth = 180;
-  const boxX = rightX - boxWidth;
-  const boxY = headerY + 2;
-  const boxHeight = 22;
+  // Font name (darker, slightly larger)
+  ctx.font = '11px Arial, sans-serif';
+  ctx.fillStyle = 'rgba(60, 60, 60, 0.9)';
   
-  // Draw subtle box background
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
-  
-  // Box border
-  ctx.strokeStyle = 'rgba(99, 102, 241, 0.2)';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-  
-  // Font label
-  ctx.textAlign = 'left';
-  ctx.font = '9px "Courier New", Courier, monospace';
-  ctx.fillStyle = 'rgba(100, 100, 100, 0.8)';
-  ctx.fillText('FONT:', boxX + 8, boxY + 10);
-  
-  // Font name - truncate if too long
-  ctx.font = 'bold 11px "Courier New", Courier, monospace';
-  ctx.fillStyle = 'rgba(40, 40, 40, 0.9)';
+  // Truncate font name if too long
   let displayFont = fontName;
-  if (ctx.measureText(displayFont).width > boxWidth - 50) {
-    while (ctx.measureText(displayFont + '...').width > boxWidth - 50 && displayFont.length > 0) {
+  const maxWidth = 150;
+  if (ctx.measureText(displayFont).width > maxWidth) {
+    while (ctx.measureText(displayFont + '...').width > maxWidth && displayFont.length > 0) {
       displayFont = displayFont.slice(0, -1);
     }
     displayFont += '...';
   }
-  ctx.fillText(displayFont, boxX + 8, boxY + 19);
+  
+  ctx.fillText(displayFont, width - margin - fontLabelWidth - 10, headerY);
   
   ctx.restore();
 };

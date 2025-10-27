@@ -102,8 +102,8 @@ export const drawPage = (
   const contentWidth = width - (margin * 2);
   const contentHeight = height - margin;
 
-  // Draw beautiful informative header
-  const headerHeight = 35;
+  // Draw clean informative header
+  const headerHeight = 20;
   if (showFooter) {
     drawWorksheetHeader(ctx, width, margin, selectedFont, true);
   }
@@ -117,7 +117,7 @@ export const drawPage = (
   }
 
   // Start content below header
-  const topMargin = showFooter ? headerHeight + 15 : margin;
+  const topMargin = showFooter ? headerHeight + 10 : margin;
   let yPosition = topMargin + fontSize;
 
   if (emptyPaper) {
