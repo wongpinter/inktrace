@@ -6,7 +6,8 @@ import { componentTagger } from "lovable-tagger";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   // Set base path for GitHub Pages deployment
-  base: mode === 'production' ? '/inktrace/' : '/',
+  // Use '/' for custom domain, '/inktrace/' for github.io subdirectory
+  base: mode === 'production' ? '/' : '/',
   server: {
     host: "::",
     port: 8080,
