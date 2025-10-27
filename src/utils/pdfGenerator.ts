@@ -150,7 +150,7 @@ export const drawPage = (
 };
 
 export const generatePDF = (preferences: WorksheetPreferences) => {
-  const { paperSize, pageCount } = preferences;
+  const { paperSize, multiPageMode, pages, pageCount } = preferences;
   const size = PAPER_SIZES[paperSize];
   
   // Use 300 DPI for print quality (instead of 96 DPI screen resolution)
@@ -163,7 +163,10 @@ export const generatePDF = (preferences: WorksheetPreferences) => {
     format: [size.width, size.height]
   });
   
-  for (let i = 0; i < pageCount; i++) {
+  // Determine total pages
+  const totalPages = multiPageMode ? pages.length : pageCount;
+  
+  for (let i = 0; i < totalPages; i++) {
     const canvas = document.createElement('canvas');
     // Render at higher resolution for print quality
     canvas.width = size.width * PRINT_SCALE;
@@ -179,14 +182,31 @@ export const generatePDF = (preferences: WorksheetPreferences) => {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     
+    // Create page-specific preferences
+    let pagePreferences = preferences;
+    if (multiPageMode && pages[i]) {
+      // Merge global settings with page-specific content
+      pagePreferences = {
+        ...preferences,
+        worksheetType: pages[i].worksheetType,
+        text: pages[i].text,
+        specificLetters: pages[i].specificLetters,
+        alphabetCase: pages[i].alphabetCase,
+        includeNumbers: pages[i].includeNumbers,
+        includeSymbols: pages[i].includeSymbols,
+        emptyPaper: pages[i].emptyPaper,
+        repeatText: pages[i].repeatText
+      };
+    }
+    
     // Draw page with page number
-    drawPage(ctx, size.width, size.height, preferences, i + 1, pageCount);
+    drawPage(ctx, size.width, size.height, pagePreferences, i + 1, totalPages);
     
     // Use maximum quality for PNG export
     const imgData = canvas.toDataURL('image/png', 1.0);
     pdf.addImage(imgData, 'PNG', 0, 0, size.width, size.height, undefined, 'FAST');
     
-    if (i < pageCount - 1) {
+    if (i < totalPages - 1) {
       pdf.addPage();
     }
   }

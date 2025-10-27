@@ -8,38 +8,55 @@ export type FontCategory = 'all' | 'educational' | 'handwriting' | 'cursive' | '
 export type GuidelineColorStyle = 'default' | 'rainbow' | 'pastel' | 'monochrome';
 export type TextTraceStyle = 'dotted' | 'dashed' | 'outline' | 'solid';
 
-export interface WorksheetPreferences {
+export interface PageConfig {
+  id: string;
+  worksheetType: WorksheetType;
   text: string;
+  specificLetters: string;
+  alphabetCase: AlphabetCase;
+  includeNumbers: boolean;
+  includeSymbols: boolean;
+  emptyPaper: boolean;
+  repeatText: boolean;
+}
+
+export interface WorksheetPreferences {
+  // Global settings
   fontSize: number;
   lineCount: number;
   selectedFont: string;
   showGuides: boolean;
   fontCategory: FontCategory;
   paperSize: PaperSize;
-  pageCount: number;
-  dottedFont: boolean;
   guidelineStyle: GuidelineStyle;
   guidelineThickness: number;
-  emptyPaper: boolean;
-  repeatText: boolean;
   fullMarginGuides: boolean;
   textOpacity: number;
   guidelineOpacity: number;
-  worksheetType: WorksheetType;
-  specificLetters: string;
-  alphabetCase: AlphabetCase;
-  includeNumbers: boolean;
-  includeSymbols: boolean;
-  // New customizable line style options
   guidelineColorStyle: GuidelineColorStyle;
   textTraceStyle: TextTraceStyle;
   letterSpacing: number;
   showStartingDots: boolean;
   showStrokeArrows: boolean;
-  // Footer options
   showPageNumbers: boolean;
   showFooter: boolean;
   footerText: string;
+  
+  // Multi-page mode
+  multiPageMode: boolean;
+  pages: PageConfig[];
+  
+  // Legacy single-page settings (for backward compatibility)
+  text: string;
+  pageCount: number;
+  dottedFont: boolean;
+  worksheetType: WorksheetType;
+  specificLetters: string;
+  alphabetCase: AlphabetCase;
+  includeNumbers: boolean;
+  includeSymbols: boolean;
+  emptyPaper: boolean;
+  repeatText: boolean;
 }
 
 export interface PaperSizeConfig {
