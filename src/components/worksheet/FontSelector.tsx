@@ -2,6 +2,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import { CATEGORY_LABELS } from '@/constants/worksheet';
 import { FontCategory } from '@/types/worksheet';
+import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
 
 interface FontSelectorProps {
   selectedFont: string;
@@ -25,19 +26,17 @@ export const FontSelector: React.FC<FontSelectorProps> = ({
   onFontHover
 }) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-soft overflow-hidden">
-      {/* Section Header */}
-      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
-        <div className="p-1.5 bg-white rounded-lg shadow-sm">
-          <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Font</h2>
-      </div>
-
-      {/* Section Content */}
-      <div className="p-4 space-y-3">
+    <CollapsibleSection
+      title="Font"
+      icon={
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      }
+      gradient="bg-gradient-to-r from-purple-50 to-pink-50"
+      iconColor="text-purple-600"
+      defaultOpen={true}
+    >
         <div className="flex flex-wrap gap-1.5">
         {Object.keys(CATEGORY_LABELS).map(category => (
           <button
@@ -85,7 +84,6 @@ export const FontSelector: React.FC<FontSelectorProps> = ({
             </option>
           ))}
         </select>
-      </div>
-    </div>
+    </CollapsibleSection>
   );
 };

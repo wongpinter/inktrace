@@ -32,7 +32,7 @@ export const WorksheetHeader: React.FC<WorksheetHeaderProps> = ({
         <button
           onClick={onDownload}
           disabled={isDownloadDisabled}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-800 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-smooth text-sm font-semibold shadow-soft hover:shadow-md"
+          className="btn-hover flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-800 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-smooth text-sm font-semibold shadow-soft hover:shadow-md hover:scale-105 active:scale-95"
           title="Download worksheet as PDF"
         >
           <Download className="w-4 h-4" />
@@ -41,7 +41,7 @@ export const WorksheetHeader: React.FC<WorksheetHeaderProps> = ({
         <div className="w-px h-8 bg-gray-200"></div>
         <button
           onClick={onSave}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md"
+          className="btn-hover flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md hover:scale-105 active:scale-95"
           title="Save current settings"
         >
           <Save className="w-4 h-4" />
@@ -49,7 +49,7 @@ export const WorksheetHeader: React.FC<WorksheetHeaderProps> = ({
         </button>
         <button
           onClick={onLoad}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md"
+          className="btn-hover flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md hover:scale-105 active:scale-95"
           title="Load saved settings"
         >
           <Upload className="w-4 h-4" />
@@ -57,7 +57,7 @@ export const WorksheetHeader: React.FC<WorksheetHeaderProps> = ({
         </button>
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md"
+          className="btn-hover flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition-smooth text-sm font-medium shadow-soft hover:shadow-md hover:scale-105 active:scale-95"
           title="Reset to defaults"
         >
           <RotateCcw className="w-4 h-4" />

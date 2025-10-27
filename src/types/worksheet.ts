@@ -36,6 +36,10 @@ export interface WorksheetPreferences {
   letterSpacing: number;
   showStartingDots: boolean;
   showStrokeArrows: boolean;
+  // Footer options
+  showPageNumbers: boolean;
+  showFooter: boolean;
+  footerText: string;
 }
 
 export interface PaperSizeConfig {

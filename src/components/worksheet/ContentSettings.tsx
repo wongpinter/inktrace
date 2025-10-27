@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
 import { WorksheetPreferences, WorksheetType, AlphabetCase } from '@/types/worksheet';
+import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
 
 interface ContentSettingsProps {
   preferences: WorksheetPreferences;
@@ -21,17 +22,13 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
   } = preferences;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-soft overflow-hidden">
-      {/* Section Header */}
-      <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-200">
-        <div className="p-1.5 bg-white rounded-lg shadow-sm">
-          <FileText className="w-4 h-4 text-indigo-600" />
-        </div>
-        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Content</h2>
-      </div>
-
-      {/* Section Content */}
-      <div className="p-4 space-y-4">
+    <CollapsibleSection
+      title="Content"
+      icon={<FileText className="w-4 h-4" />}
+      gradient="bg-gradient-to-r from-indigo-50 to-blue-50"
+      iconColor="text-indigo-600"
+      defaultOpen={true}
+    >
         <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
         <input
           type="checkbox"
@@ -167,7 +164,6 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
           </div>
         </>
       )}
-      </div>
-    </div>
+    </CollapsibleSection>
   );
 };
