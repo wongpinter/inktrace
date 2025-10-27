@@ -1,4 +1,4 @@
-import { PaperSizeConfig, GuidelineStyleConfig, FontCategory, WorksheetPreferences } from '@/types/worksheet';
+import { PaperSizeConfig, GuidelineStyleConfig, FontCategory, WorksheetPreferences, WorksheetPreset } from '@/types/worksheet';
 
 export const STORAGE_KEY = 'handwriting-worksheet-preferences';
 
@@ -290,4 +290,136 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   includeSymbols: true,
   emptyPaper: false,
   repeatText: false
+};
+
+
+// Predefined worksheet presets for common use cases
+export const WORKSHEET_PRESETS: Record<string, WorksheetPreset> = {
+  kindergarten: {
+    name: 'Kindergarten',
+    description: 'Large spacing with dotted midline for beginning writers',
+    icon: '🎨',
+    preferences: {
+      fontSize: 60,
+      lineCount: 3,
+      selectedFont: 'Edu QLD Beginner',
+      guidelineStyle: 'dotted',
+      lineSpacingPreset: 'kindergarten',
+      textOpacity: 0.4,
+      letterSpacing: 2,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  earlyElementary: {
+    name: 'Early Elementary (1-3)',
+    description: 'Standard spacing for grades 1-3 with educational proportions',
+    icon: '✏️',
+    preferences: {
+      fontSize: 48,
+      lineCount: 3,
+      selectedFont: 'Edu QLD Beginner',
+      guidelineStyle: 'elementary',
+      lineSpacingPreset: 'grade1-3',
+      textOpacity: 0.3,
+      letterSpacing: 0,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  upperElementary: {
+    name: 'Upper Elementary (4-6)',
+    description: 'Wide ruled spacing for developing writers',
+    icon: '📝',
+    preferences: {
+      fontSize: 36,
+      lineCount: 4,
+      selectedFont: 'Edu QLD Beginner',
+      guidelineStyle: 'elementary',
+      lineSpacingPreset: 'grade4-6',
+      textOpacity: 0.25,
+      letterSpacing: 0,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  middleSchool: {
+    name: 'Middle School (7+)',
+    description: 'Narrow ruled spacing for mature handwriting',
+    icon: '📚',
+    preferences: {
+      fontSize: 28,
+      lineCount: 5,
+      selectedFont: 'Edu QLD Beginner',
+      guidelineStyle: 'standard',
+      lineSpacingPreset: 'narrow-ruled',
+      textOpacity: 0.2,
+      letterSpacing: 0,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  cursivePractice: {
+    name: 'Cursive Practice',
+    description: 'Optimized for cursive handwriting with flowing letters',
+    icon: '✍️',
+    preferences: {
+      fontSize: 42,
+      lineCount: 3,
+      selectedFont: 'Dancing Script',
+      guidelineStyle: 'elementary',
+      lineSpacingPreset: 'grade1-3',
+      textOpacity: 0.3,
+      letterSpacing: -2,
+      wordSpacing: 8,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  tracingWorksheet: {
+    name: 'Tracing Worksheet',
+    description: 'High opacity with dotted text for tracing practice',
+    icon: '👆',
+    preferences: {
+      fontSize: 54,
+      lineCount: 2,
+      selectedFont: 'Edu QLD Beginner',
+      guidelineStyle: 'dotted',
+      lineSpacingPreset: 'grade1-3',
+      textOpacity: 0.5,
+      textTraceStyle: 'dotted',
+      letterSpacing: 3,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  },
+  emptyPractice: {
+    name: 'Empty Practice Paper',
+    description: 'Blank lined paper for free writing',
+    icon: '📄',
+    preferences: {
+      emptyPaper: true,
+      guidelineStyle: 'elementary',
+      lineSpacingPreset: 'grade1-3',
+      showGuides: true,
+      guidelineColorStyle: 'default',
+      printQuality: 'high'
+    }
+  },
+  colorfulKids: {
+    name: 'Colorful for Kids',
+    description: 'Rainbow guidelines to make practice fun',
+    icon: '🌈',
+    preferences: {
+      fontSize: 52,
+      lineCount: 3,
+      selectedFont: 'Schoolbell',
+      guidelineStyle: 'dotted',
+      lineSpacingPreset: 'grade1-3',
+      guidelineColorStyle: 'rainbow',
+      textOpacity: 0.35,
+      showGuides: true,
+      printQuality: 'high'
+    }
+  }
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { WorksheetPreferences } from '@/types/worksheet';
 import { useWorksheetPreferences } from '@/hooks/useWorksheetPreferences';
 import { useFontLoader } from '@/hooks/useFontLoader';
 import { generatePDF } from '@/utils/pdfGenerator';
@@ -13,9 +14,10 @@ import { TextSpacingSettings } from '@/components/worksheet/TextSpacingSettings'
 import { LineSpacingSettings } from '@/components/worksheet/LineSpacingSettings';
 import { GuidelineLayoutSettings } from '@/components/worksheet/GuidelineLayoutSettings';
 import { GuidelineAppearanceSettings } from '@/components/worksheet/GuidelineAppearanceSettings';
+import { PresetSelector } from '@/components/worksheet/PresetSelector';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
-import { FileText, Type, Settings, Sparkles, Layout, Ruler, Palette, AlignLeft, Eye } from 'lucide-react';
+import { FileText, Type, Settings, Sparkles, Layout, Ruler, Palette, AlignLeft, Eye, Zap } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -35,6 +37,13 @@ const HandwritingWorksheetGenerator = () => {
     preferences.fontCategory,
     searchQuery
   );
+
+  const handleSelectPreset = (presetPreferences: Partial<WorksheetPreferences>) => {
+    // Apply preset preferences while keeping user's text content
+    Object.entries(presetPreferences).forEach(([key, value]) => {
+      updatePreference(key as keyof WorksheetPreferences, value as any);
+    });
+  };
 
   const handleGeneratePDF = async () => {
     setIsGenerating(true);
@@ -136,8 +145,18 @@ const HandwritingWorksheetGenerator = () => {
               <div className="settings-sidebar h-full overflow-y-auto overflow-x-hidden p-6">
                 <div className="space-y-3 pb-6">
                   <AccordionNav
-                    defaultOpen="document"
+                    defaultOpen="presets"
                     sections={[
+                      {
+                        id: 'presets',
+                        title: 'Quick Start Presets',
+                        icon: <Zap className="w-5 h-5" />,
+                        content: (
+                          <PresetSelector
+                            onSelectPreset={handleSelectPreset}
+                          />
+                        )
+                      },
                       {
                         id: 'document',
                         title: 'Document Setup',
