@@ -21,7 +21,7 @@ const HandwritingWorksheetGenerator = () => {
   const [pageCount, setPageCount] = useState(1);
   const [dottedFont, setDottedFont] = useState(true);
   const [guidelineStyle, setGuidelineStyle] = useState('elementary');
-  const [guidelineThickness, setGuidelineThickness] = useState(1);
+  const [guidelineThickness, setGuidelineThickness] = useState(0.5);
   const [emptyPaper, setEmptyPaper] = useState(false);
   const [repeatText, setRepeatText] = useState(false);
   const [fullMarginGuides, setFullMarginGuides] = useState(false);
@@ -232,7 +232,7 @@ const HandwritingWorksheetGenerator = () => {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    const margin = fullMarginGuides ? 0 : 50;
+    const margin = fullMarginGuides ? 20 : 50;
     const contentWidth = width - (margin * 2);
     const contentHeight = height - margin; // Usable height
     
@@ -723,12 +723,13 @@ const HandwritingWorksheetGenerator = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Guideline Thickness: {guidelineThickness}px
+                  Guideline Thickness: {guidelineThickness.toFixed(2)}px
                 </label>
                 <input
                   type="range"
-                  min="1"
+                  min="0.25"
                   max="3"
+                  step="0.25"
                   value={guidelineThickness}
                   onChange={(e) => setGuidelineThickness(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
