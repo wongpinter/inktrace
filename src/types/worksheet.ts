@@ -5,6 +5,8 @@ export type AlphabetCase = 'uppercase' | 'lowercase' | 'both';
 export type PaperSize = 'a4' | 'letter' | 'legal' | 'a5';
 export type GuidelineStyle = 'standard' | 'elementary' | 'dotted' | 'double';
 export type FontCategory = 'all' | 'educational' | 'handwriting' | 'cursive' | 'display' | 'serif' | 'sansSerif' | 'monospace';
+export type GuidelineColorStyle = 'default' | 'rainbow' | 'pastel' | 'monochrome';
+export type TextTraceStyle = 'dotted' | 'dashed' | 'outline' | 'solid';
 
 export interface WorksheetPreferences {
   text: string;
@@ -28,6 +30,12 @@ export interface WorksheetPreferences {
   alphabetCase: AlphabetCase;
   includeNumbers: boolean;
   includeSymbols: boolean;
+  // New customizable line style options
+  guidelineColorStyle: GuidelineColorStyle;
+  textTraceStyle: TextTraceStyle;
+  letterSpacing: number;
+  showStartingDots: boolean;
+  showStrokeArrows: boolean;
 }
 
 export interface PaperSizeConfig {

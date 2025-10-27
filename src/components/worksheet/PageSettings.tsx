@@ -1,15 +1,14 @@
 import React from 'react';
-import { Settings, Download } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { WorksheetPreferences, PaperSize, GuidelineStyle } from '@/types/worksheet';
 import { PAPER_SIZES, GUIDELINE_STYLES } from '@/constants/worksheet';
 
 interface PageSettingsProps {
   preferences: WorksheetPreferences;
   updatePreference: <K extends keyof WorksheetPreferences>(key: K, value: WorksheetPreferences[K]) => void;
-  onGeneratePDF: () => void;
 }
 
-export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updatePreference, onGeneratePDF }) => {
+export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updatePreference }) => {
   const {
     paperSize,
     pageCount,
@@ -20,22 +19,14 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
     showGuides,
     fullMarginGuides,
     textOpacity,
-    guidelineOpacity,
-    text,
-    worksheetType,
-    emptyPaper,
-    includeNumbers,
-    includeSymbols
+    guidelineOpacity
   } = preferences;
-
-  const isDisabled = (!text && worksheetType === 'text' && !emptyPaper) || 
-                     (worksheetType === 'numbers' && !includeNumbers && !includeSymbols);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 text-indigo-600 font-semibold">
+      <div className="flex items-center gap-2 text-indigo-600 font-semibold mb-4">
         <Settings className="w-5 h-5" />
-        <h2 className="text-lg">Page & Line Settings</h2>
+        <h2 className="text-base">Worksheet Style</h2>
       </div>
 
       <div>
@@ -181,15 +172,6 @@ export const PageSettings: React.FC<PageSettingsProps> = ({ preferences, updateP
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
       </div>
-
-      <button
-        onClick={onGeneratePDF}
-        disabled={isDisabled}
-        className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
-      >
-        <Download className="w-5 h-5" />
-        Download {pageCount} Page{pageCount > 1 ? 's' : ''} as PDF
-      </button>
     </div>
   );
 };

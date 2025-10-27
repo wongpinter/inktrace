@@ -98,7 +98,8 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
           <strong>Tips:</strong><br/>
           • The first line is for tracing; {preferences.lineCount - 1} blank {preferences.lineCount - 1 > 1 ? 'lines' : 'line'} follow{preferences.lineCount - 1 > 1 ? '' : 's'}.<br/>
           • Use 'Dotted Font' for a classic tracing look.<br/>
-          • 'Empty Paper' mode creates blank guided sheets.<br/>
+          • Try rainbow guidelines for colorful practice!<br/>
+          • Letter spacing helps with fine motor skills.<br/>
           • All pages will be combined into a single PDF.
         </p>
       </div>

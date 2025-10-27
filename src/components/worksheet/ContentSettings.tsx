@@ -22,9 +22,9 @@ export const ContentSettings: React.FC<ContentSettingsProps> = ({ preferences, u
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 text-indigo-600 font-semibold">
+      <div className="flex items-center gap-2 text-indigo-600 font-semibold mb-4">
         <FileText className="w-5 h-5" />
-        <h2 className="text-lg">Content</h2>
+        <h2 className="text-base">Content Settings</h2>
       </div>
 
       <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">

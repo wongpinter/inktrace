@@ -7,6 +7,7 @@ import { ContentSettings } from '@/components/worksheet/ContentSettings';
 import { FontSelector } from '@/components/worksheet/FontSelector';
 import { PageSettings } from '@/components/worksheet/PageSettings';
 import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
+import { LineStyleSettings } from '@/components/worksheet/LineStyleSettings';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -29,50 +30,64 @@ const HandwritingWorksheetGenerator = () => {
     generatePDF(preferences);
   };
 
+  const isDownloadDisabled =
+    (!preferences.text && preferences.worksheetType === 'text' && !preferences.emptyPaper) ||
+    (preferences.worksheetType === 'numbers' && !preferences.includeNumbers && !preferences.includeSymbols);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-2xl p-6">
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-[1400px] mx-auto">
+        <div className="bg-white rounded-lg shadow-sm">
           <WorksheetHeader
             onSave={savePreferences}
             onLoad={loadPreferences}
             onReset={resetPreferences}
+            onDownload={handleGeneratePDF}
+            pageCount={preferences.pageCount}
+            isDownloadDisabled={isDownloadDisabled}
           />
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Column 1: Content Settings */}
-            <div className="space-y-4">
-              <ContentSettings
-                preferences={preferences}
-                updatePreference={updatePreference}
-              />
-              
-              {!preferences.emptyPaper && (
-                <FontSelector
-                  selectedFont={preferences.selectedFont}
-                  fontCategory={preferences.fontCategory}
-                  searchQuery={searchQuery}
-                  filteredFonts={filteredFonts}
-                  onFontChange={(font) => updatePreference('selectedFont', font)}
-                  onCategoryChange={(category) => updatePreference('fontCategory', category)}
-                  onSearchChange={setSearchQuery}
-                  onFontHover={loadFont}
+          <div className="grid lg:grid-cols-[400px_1fr] gap-0 border-t">
+            {/* Left Sidebar: All Settings */}
+            <div className="border-r bg-gray-50 p-6 max-h-[calc(100vh-100px)] overflow-y-auto">
+              <div className="space-y-6">
+                <ContentSettings
+                  preferences={preferences}
+                  updatePreference={updatePreference}
                 />
-              )}
+
+                {!preferences.emptyPaper && (
+                  <FontSelector
+                    selectedFont={preferences.selectedFont}
+                    fontCategory={preferences.fontCategory}
+                    searchQuery={searchQuery}
+                    filteredFonts={filteredFonts}
+                    onFontChange={(font) => updatePreference('selectedFont', font)}
+                    onCategoryChange={(category) => updatePreference('fontCategory', category)}
+                    onSearchChange={setSearchQuery}
+                    onFontHover={loadFont}
+                  />
+                )}
+
+                <PageSettings
+                  preferences={preferences}
+                  updatePreference={updatePreference}
+                />
+
+                <LineStyleSettings
+                  preferences={preferences}
+                  updatePreference={updatePreference}
+                />
+              </div>
             </div>
 
-            {/* Column 2: Page Settings */}
-            <PageSettings
-              preferences={preferences}
-              updatePreference={updatePreference}
-              onGeneratePDF={handleGeneratePDF}
-            />
-
-            {/* Column 3: Preview */}
-            <WorksheetPreview
-              preferences={preferences}
-              fontsLoaded={fontsLoaded}
-            />
+            {/* Right Side: Preview */}
+            <div className="bg-white p-6">
+              <WorksheetPreview
+                preferences={preferences}
+                fontsLoaded={fontsLoaded}
+              />
+            </div>
           </div>
         </div>
       </div>

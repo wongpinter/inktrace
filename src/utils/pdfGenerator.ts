@@ -28,7 +28,11 @@ export const drawPage = (
     specificLetters,
     alphabetCase,
     includeNumbers,
-    includeSymbols
+    includeSymbols,
+    guidelineColorStyle,
+    textTraceStyle,
+    letterSpacing,
+    showStartingDots
   } = preferences;
 
   ctx.fillStyle = '#ffffff';
@@ -45,7 +49,7 @@ export const drawPage = (
     
     while (yPosition < contentHeight) {
       if (showGuides) {
-        drawGuidelines(ctx, margin, yPosition - fontSize * TOP_LINE_RATIO, contentWidth, guidelineStyle, fontSize, guidelineThickness, guidelineOpacity);
+        drawGuidelines(ctx, margin, yPosition - fontSize * TOP_LINE_RATIO, contentWidth, guidelineStyle, fontSize, guidelineThickness, guidelineOpacity, guidelineColorStyle);
       }
       yPosition += lineSetHeight;
     }
@@ -75,7 +79,7 @@ export const drawPage = (
           const metrics = ctx.measureText(testLine);
           
           if (metrics.width > contentWidth && currentLine) {
-            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth);
+            drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
             yPosition += lineSetHeight;
             currentLine = word;
             
@@ -86,7 +90,7 @@ export const drawPage = (
         }
         
         if (currentLine && yPosition < contentHeight) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
           yPosition += lineSetHeight;
         } else {
           break;
@@ -102,7 +106,7 @@ export const drawPage = (
         const metrics = ctx.measureText(testLine);
         
         if (metrics.width > contentWidth && currentLine) {
-          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth);
+          drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
           yPosition += lineSetHeight;
           currentLine = word;
           
@@ -113,7 +117,7 @@ export const drawPage = (
       }
       
       if (currentLine && yPosition < contentHeight) {
-        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth);
+        drawTracingLine(ctx, currentLine, margin, yPosition, lineHeight, lineCount, fontSize, selectedFont, dottedFont, textOpacity, showGuides, guidelineStyle, guidelineThickness, guidelineOpacity, contentWidth, guidelineColorStyle, textTraceStyle, letterSpacing, showStartingDots);
       }
     }
   }

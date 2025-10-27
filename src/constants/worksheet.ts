@@ -78,6 +78,52 @@ export const CATEGORY_LABELS: Record<FontCategory, string> = {
   monospace: 'Monospace'
 };
 
+export const GUIDELINE_COLOR_STYLES = {
+  default: {
+    label: 'Default (Gray)',
+    colors: {
+      top: 'rgba(153, 153, 153, 1)',
+      middle: 'rgba(204, 204, 204, 1)',
+      baseline: 'rgba(153, 153, 153, 1)',
+      bottom: 'rgba(153, 153, 153, 1)'
+    }
+  },
+  rainbow: {
+    label: 'Rainbow',
+    colors: {
+      top: 'rgba(255, 99, 71, 1)',      // Red
+      middle: 'rgba(255, 165, 0, 1)',   // Orange
+      baseline: 'rgba(50, 205, 50, 1)', // Green
+      bottom: 'rgba(30, 144, 255, 1)'   // Blue
+    }
+  },
+  pastel: {
+    label: 'Pastel',
+    colors: {
+      top: 'rgba(255, 182, 193, 1)',    // Light pink
+      middle: 'rgba(221, 160, 221, 1)', // Plum
+      baseline: 'rgba(176, 224, 230, 1)', // Powder blue
+      bottom: 'rgba(152, 251, 152, 1)'  // Pale green
+    }
+  },
+  monochrome: {
+    label: 'Monochrome (Black)',
+    colors: {
+      top: 'rgba(0, 0, 0, 1)',
+      middle: 'rgba(100, 100, 100, 1)',
+      baseline: 'rgba(0, 0, 0, 1)',
+      bottom: 'rgba(0, 0, 0, 1)'
+    }
+  }
+};
+
+export const TEXT_TRACE_STYLES = {
+  dotted: { label: 'Dotted', dashPattern: [2, 3] },
+  dashed: { label: 'Dashed', dashPattern: [8, 4] },
+  outline: { label: 'Outline Only', dashPattern: [] },
+  solid: { label: 'Solid (Light)', dashPattern: [] }
+};
+
 export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   text: 'The quick brown fox jumps over the lazy dog',
   fontSize: 48,
@@ -99,5 +145,10 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   specificLetters: 'Aa Bb Cc Dd',
   alphabetCase: 'both',
   includeNumbers: true,
-  includeSymbols: true
+  includeSymbols: true,
+  guidelineColorStyle: 'default',
+  textTraceStyle: 'dotted',
+  letterSpacing: 0,
+  showStartingDots: false,
+  showStrokeArrows: false
 };
