@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LINE_RATIO, BASELINE_RATIO, LINE_SPACING_PRESETS, mmToPixels } from '@/constants/worksheet';
+import { PAPER_SIZES, LINE_HEIGHT_MULTIPLIER, LINE_SET_HEIGHT_MULTIPLIER, TOP_LINE_RATIO, BASELINE_RATIO, LINE_SPACING_PRESETS, mmToPixels, PRINT_QUALITY_SETTINGS } from '@/constants/worksheet';
 import { WorksheetPreferences } from '@/types/worksheet';
 import { drawGuidelines, drawTracingLine, drawMarginLines } from './canvasDrawing';
 import { getWorksheetContent } from './worksheetContent';
@@ -12,22 +12,16 @@ const getLineHeightFromPreset = (preferences: WorksheetPreferences, fontSize: nu
   
   if (preset === 'custom') {
     const customSpacing = preferences.customLineSpacing || 12.7;
-    const result = mmToPixels(customSpacing);
-    console.log(`✓ Line spacing: custom (${customSpacing.toFixed(1)}mm) = ${Math.round(result)}px`);
-    return result;
+    return mmToPixels(customSpacing);
   }
   
   const spacingConfig = LINE_SPACING_PRESETS[preset];
   if (!spacingConfig) {
     // Fallback to multiplier-based calculation if preset not found
-    const result = fontSize * LINE_HEIGHT_MULTIPLIER;
-    console.log(`⚠ Line spacing: fallback ${Math.round(result)}px (fontSize ${fontSize} × ${LINE_HEIGHT_MULTIPLIER})`);
-    return result;
+    return fontSize * LINE_HEIGHT_MULTIPLIER;
   }
   
-  const result = mmToPixels(spacingConfig.spacingMm);
-  console.log(`✓ Line spacing: ${preset} (${spacingConfig.spacingMm}mm) = ${Math.round(result)}px`);
-  return result;
+  return mmToPixels(spacingConfig.spacingMm);
 };
 
 // Helper function to measure text width as it will actually be rendered
@@ -251,12 +245,12 @@ export const drawPage = (
 };
 
 export const generatePDF = (preferences: WorksheetPreferences) => {
-  const { paperSize, multiPageMode, pages, pageCount } = preferences;
+  const { paperSize, multiPageMode, pages, pageCount, printQuality } = preferences;
   const size = PAPER_SIZES[paperSize];
 
-  // Use 300 DPI for print quality (instead of 96 DPI screen resolution)
-  // Scale factor: 300 / 96 = 3.125
-  const PRINT_SCALE = 3.125;
+  // Get print quality settings
+  const qualitySettings = PRINT_QUALITY_SETTINGS[printQuality || 'high'];
+  const PRINT_SCALE = qualitySettings.scale;
 
   const pdf = new jsPDF({
     orientation: size.width > size.height ? 'landscape' : 'portrait',
@@ -279,9 +273,19 @@ export const generatePDF = (preferences: WorksheetPreferences) => {
     // Scale the context to render at higher resolution
     ctx.scale(PRINT_SCALE, PRINT_SCALE);
 
-    // Enable high-quality rendering
+    // Enable high-quality rendering for print
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
+    
+    // Optimize text rendering for print quality
+    if ('textRendering' in ctx) {
+      (ctx as any).textRendering = 'geometricPrecision';
+    }
+    
+    // Enable font smoothing
+    if ('fontSmooth' in ctx) {
+      (ctx as any).fontSmooth = 'always';
+    }
 
     // Create page-specific preferences
     let pagePreferences = preferences;
@@ -303,9 +307,10 @@ export const generatePDF = (preferences: WorksheetPreferences) => {
     // Draw page with page number
     drawPage(ctx, size.width, size.height, pagePreferences, i + 1, totalPages);
 
-    // Use maximum quality for PNG export
-    const imgData = canvas.toDataURL('image/png', 1.0);
-    pdf.addImage(imgData, 'PNG', 0, 0, size.width, size.height, undefined, 'FAST');
+    // Use JPEG with high quality for better file size while maintaining print quality
+    // JPEG at 0.95 quality provides excellent results with much smaller file size
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    pdf.addImage(imgData, 'JPEG', 0, 0, size.width, size.height, undefined, 'FAST');
 
     if (i < totalPages - 1) {
       pdf.addPage();

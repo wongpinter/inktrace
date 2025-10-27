@@ -54,6 +54,28 @@ export const mmToPixels = (mm: number): number => {
   return (mm * 96) / 25.4;
 };
 
+// Print quality settings (DPI for PDF export)
+export const PRINT_QUALITY_SETTINGS = {
+  standard: {
+    dpi: 150,
+    scale: 150 / 96, // 1.5625
+    label: 'Standard (150 DPI)',
+    description: 'Good for screen viewing and basic printing'
+  },
+  high: {
+    dpi: 300,
+    scale: 300 / 96, // 3.125
+    label: 'High Quality (300 DPI)',
+    description: 'Professional print quality (recommended)'
+  },
+  ultra: {
+    dpi: 600,
+    scale: 600 / 96, // 6.25
+    label: 'Ultra High (600 DPI)',
+    description: 'Maximum quality for professional printing'
+  }
+};
+
 export const PAPER_SIZES: Record<string, PaperSizeConfig> = {
   a4: { width: 794, height: 1122, label: 'A4 (210 × 297 mm)' },
   letter: { width: 816, height: 1056, label: 'Letter (8.5 × 11 in)' },
@@ -201,6 +223,9 @@ export const DEFAULT_PREFERENCES: WorksheetPreferences = {
   // Line spacing
   lineSpacingPreset: 'grade1-3',
   customLineSpacing: 12.7,
+  
+  // Print quality
+  printQuality: 'high',
 
   // Enhanced guideline options
   customGuidelineColors: {

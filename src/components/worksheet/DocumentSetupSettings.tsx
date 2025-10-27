@@ -1,6 +1,6 @@
 import React from 'react';
-import { WorksheetPreferences, PaperSize } from '@/types/worksheet';
-import { PAPER_SIZES } from '@/constants/worksheet';
+import { WorksheetPreferences, PaperSize, PrintQuality } from '@/types/worksheet';
+import { PAPER_SIZES, PRINT_QUALITY_SETTINGS } from '@/constants/worksheet';
 
 interface DocumentSetupSettingsProps {
   preferences: WorksheetPreferences;
@@ -26,6 +26,26 @@ export const DocumentSetupSettings: React.FC<DocumentSetupSettingsProps> = ({
             <option key={key} value={key}>{label}</option>
           ))}
         </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Print Quality (PDF Export)
+        </label>
+        <select
+          value={preferences.printQuality}
+          onChange={(e) => updatePreference('printQuality', e.target.value as PrintQuality)}
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none text-sm"
+        >
+          {Object.entries(PRINT_QUALITY_SETTINGS).map(([key, config]) => (
+            <option key={key} value={key}>
+              {config.label}
+            </option>
+          ))}
+        </select>
+        <p className="text-xs text-gray-500 mt-1">
+          {PRINT_QUALITY_SETTINGS[preferences.printQuality || 'high'].description}
+        </p>
       </div>
 
       <div>

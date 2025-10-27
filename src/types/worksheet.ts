@@ -14,6 +14,7 @@ export type SightWordList = 'dolch-preprimer' | 'dolch-primer' | 'dolch-first' |
 export type WordPattern = 'cvc' | 'cvce' | 'ccvc' | 'cvcc' | 'digraph' | 'vowelTeam';
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 export type LineSpacingPreset = 'custom' | 'kindergarten' | 'grade1-3' | 'grade4-6' | 'wide-ruled' | 'narrow-ruled';
+export type PrintQuality = 'standard' | 'high' | 'ultra';
 
 export interface PageConfig {
   id: string;
@@ -65,6 +66,9 @@ export interface WorksheetPreferences {
   // Line spacing
   lineSpacingPreset: LineSpacingPreset;
   customLineSpacing: number; // in mm, used when lineSpacingPreset is 'custom'
+  
+  // Print quality
+  printQuality: PrintQuality; // DPI setting for PDF export
   
   // Enhanced guideline options
   customGuidelineColors: CustomGuidelineColors;
