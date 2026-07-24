@@ -45,6 +45,7 @@ jobs:
         run: |
           pip install mkdocs mkdocs-material
           mkdocs build --clean
+          mkdir -p dist/wiki
           cp -r site/* dist/wiki/
 
       - name: Setup Pages
