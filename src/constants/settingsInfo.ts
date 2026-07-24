@@ -61,6 +61,15 @@ export const SETTINGS_INFO: Record<string, SettingsCategoryInfo> = {
       'Letter spacing, word spacing, character width, and practice lines'
     ]
   },
+  json: {
+    title: 'JSON settings',
+    description: 'Copy your current worksheet settings as JSON, save them anywhere, or paste a JSON block to apply it. Useful for sharing recipes or restoring a previous setup.',
+    changes: [
+      'Copy current preferences to clipboard',
+      'Paste a JSON block to apply selected settings',
+      'Unknown keys are ignored, defaults preserved'
+    ]
+  },
   guidelines: {
     title: 'Guidelines',
     description: 'Configure handwriting guide spacing, layout, margins, and visual appearance in one place.',

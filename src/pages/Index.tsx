@@ -19,12 +19,13 @@ import { GuidelineLayoutSettings } from '@/components/worksheet/GuidelineLayoutS
 import { GuidelineAppearanceSettings } from '@/components/worksheet/GuidelineAppearanceSettings';
 import { PresetSelector } from '@/components/worksheet/PresetSelector';
 import { GuidedRecipes } from '@/components/worksheet/GuidedRecipes';
+import { JsonSettings } from '@/components/worksheet/JsonSettings';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
 import { SettingsHint } from '@/components/ui/SettingsHint';
 import { SETTINGS_INFO } from '@/constants/settingsInfo';
-import { FileText, Type, Settings, Sparkles, Layout, Ruler, Zap } from 'lucide-react';
+import { FileText, Type, Settings, Sparkles, Layout, Ruler, Zap, Code2 } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -331,6 +332,22 @@ const HandwritingWorksheetGenerator = () => {
                               </div>
                             )}
                           </div>
+                        )
+                      },
+                      {
+                        id: 'json',
+                        title: (
+                          <span className="flex items-center">
+                            JSON settings
+                            <InfoTooltip {...SETTINGS_INFO.json} />
+                          </span>
+                        ),
+                        icon: <Code2 className="w-5 h-5" />,
+                        content: (
+                          <JsonSettings
+                            preferences={preferences}
+                            replacePreferences={replacePreferences}
+                          />
                         )
                       }
                     ]}
