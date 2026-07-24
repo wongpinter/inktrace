@@ -335,7 +335,7 @@ export const drawTracingLine = (
       ctx.font = `${fontSize}px "${selectedFont}"`;
       
       // Apply word spacing if needed
-      let adjustedX = characterWidthScale !== 1.0 ? x / characterWidthScale : x;
+      const adjustedX = characterWidthScale !== 1.0 ? x / characterWidthScale : x;
       
       if (wordSpacing > 0) {
         // Draw text with custom word spacing

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus, Trash2, Copy, GripVertical } from 'lucide-react';
 import { PageConfig, WorksheetType, AlphabetCase, WorksheetPreferences } from '@/types/worksheet';
+import { createBlankPage, createPageFromPreferences } from '@/utils/pageSet';
 
 interface PageBuilderProps {
   preferences: WorksheetPreferences;
@@ -10,20 +11,8 @@ interface PageBuilderProps {
 export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePreference }) => {
   const { multiPageMode, pages } = preferences;
 
-  const createNewPage = (): PageConfig => ({
-    id: `page-${Date.now()}`,
-    worksheetType: 'text',
-    text: '',
-    specificLetters: 'Aa Bb Cc Dd',
-    alphabetCase: 'both',
-    includeNumbers: true,
-    includeSymbols: true,
-    emptyPaper: false,
-    repeatText: false
-  });
-
   const addPage = () => {
-    updatePreference('pages', [...pages, createNewPage()]);
+    updatePreference('pages', [...pages, createBlankPage()]);
   };
 
   const duplicatePage = (index: number) => {
@@ -63,18 +52,7 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePre
   const toggleMultiPageMode = (enabled: boolean) => {
     if (enabled && pages.length === 0) {
       // Initialize with one page from current settings
-      const initialPage: PageConfig = {
-        id: `page-${Date.now()}`,
-        worksheetType: preferences.worksheetType,
-        text: preferences.text,
-        specificLetters: preferences.specificLetters,
-        alphabetCase: preferences.alphabetCase,
-        includeNumbers: preferences.includeNumbers,
-        includeSymbols: preferences.includeSymbols,
-        emptyPaper: preferences.emptyPaper,
-        repeatText: preferences.repeatText
-      };
-      updatePreference('pages', [initialPage]);
+      updatePreference('pages', [createPageFromPreferences(preferences)]);
     }
     updatePreference('multiPageMode', enabled);
   };

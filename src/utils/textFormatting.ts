@@ -55,29 +55,3 @@ export const transformTextCase = (text: string, textCase: TextCase): string => {
   }
 };
 
-/**
- * Apply text formatting to canvas context
- */
-export const applyTextFormatting = (
-  ctx: CanvasRenderingContext2D,
-  characterWidth: CharacterWidth
-) => {
-  const scale = getCharacterWidthScale(characterWidth);
-  if (scale !== 1.0) {
-    ctx.save();
-    ctx.scale(scale, 1);
-  }
-};
-
-/**
- * Restore canvas context after text formatting
- */
-export const restoreTextFormatting = (
-  ctx: CanvasRenderingContext2D,
-  characterWidth: CharacterWidth
-) => {
-  const scale = getCharacterWidthScale(characterWidth);
-  if (scale !== 1.0) {
-    ctx.restore();
-  }
-};

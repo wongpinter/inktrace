@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { WorksheetPreferences } from '@/types/worksheet';
 import { STORAGE_KEY, DEFAULT_PREFERENCES } from '@/constants/worksheet';
 import { useToast } from '@/hooks/use-toast';
+import { mergeSavedPreferences } from '@/utils/worksheetPreferences';
 
 export const useWorksheetPreferences = () => {
   const { toast } = useToast();
@@ -14,7 +15,7 @@ export const useWorksheetPreferences = () => {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          setPreferences({ ...DEFAULT_PREFERENCES, ...parsed });
+          setPreferences(mergeSavedPreferences(parsed));
         } catch (parseError) {
           console.error('Failed to parse saved preferences:', parseError);
           // Corrupted data - clear it
@@ -49,7 +50,7 @@ export const useWorksheetPreferences = () => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        setPreferences({ ...DEFAULT_PREFERENCES, ...parsed });
+        setPreferences(mergeSavedPreferences(parsed));
         toast({
           title: "Preferences Loaded",
           description: "Your saved settings have been restored.",
@@ -92,9 +93,14 @@ export const useWorksheetPreferences = () => {
     setPreferences(prev => ({ ...prev, [key]: value }));
   };
 
+  const replacePreferences = (nextPreferences: WorksheetPreferences) => {
+    setPreferences(nextPreferences);
+  };
+
   return {
     preferences,
     updatePreference,
+    replacePreferences,
     savePreferences,
     loadPreferences,
     resetPreferences

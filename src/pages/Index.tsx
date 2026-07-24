@@ -3,6 +3,8 @@ import { WorksheetPreferences } from '@/types/worksheet';
 import { useWorksheetPreferences } from '@/hooks/useWorksheetPreferences';
 import { useFontLoader } from '@/hooks/useFontLoader';
 import { generatePDF } from '@/utils/pdfGenerator';
+import { getTotalPages } from '@/utils/pageSet';
+import { applyPresetPreferences } from '@/utils/worksheetPreferences';
 import { ContentSettings } from '@/components/worksheet/ContentSettings';
 import { WorksheetPreview } from '@/components/worksheet/WorksheetPreview';
 import { PageBuilder } from '@/components/worksheet/PageBuilder';
@@ -25,6 +27,7 @@ const HandwritingWorksheetGenerator = () => {
   const {
     preferences,
     updatePreference,
+    replacePreferences,
     savePreferences,
     loadPreferences,
     resetPreferences
@@ -41,10 +44,7 @@ const HandwritingWorksheetGenerator = () => {
   );
 
   const handleSelectPreset = (presetPreferences: Partial<WorksheetPreferences>) => {
-    // Apply preset preferences while keeping user's text content
-    Object.entries(presetPreferences).forEach(([key, value]) => {
-      updatePreference(key as keyof WorksheetPreferences, value as any);
-    });
+    replacePreferences(applyPresetPreferences(preferences, presetPreferences));
   };
 
   const handleGeneratePDF = async () => {
@@ -53,7 +53,7 @@ const HandwritingWorksheetGenerator = () => {
     
     try {
       // Determine total pages
-      const totalPages = preferences.multiPageMode ? preferences.pages.length : preferences.pageCount;
+      const totalPages = getTotalPages(preferences);
       
       // Simulate progress for each page
       for (let i = 1; i <= totalPages; i++) {
@@ -81,7 +81,7 @@ const HandwritingWorksheetGenerator = () => {
       <ProgressIndicator 
         isGenerating={isGenerating}
         currentPage={currentPage}
-        totalPages={preferences.multiPageMode ? preferences.pages.length : preferences.pageCount}
+        totalPages={getTotalPages(preferences)}
       />
       
       <style>{`

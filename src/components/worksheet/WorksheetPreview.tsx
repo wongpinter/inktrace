@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { WorksheetPreferences } from '@/types/worksheet';
 import { PAPER_SIZES } from '@/constants/worksheet';
-import { drawPage } from '@/utils/pdfGenerator';
-import { getWorksheetContent } from '@/utils/worksheetContent';
+import { getEffectivePage, getTotalPages } from '@/utils/pageSet';
+import { renderWorksheetPage } from '@/utils/worksheetRenderer';
 
 interface WorksheetPreviewProps {
   preferences: WorksheetPreferences;
@@ -16,11 +16,6 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
   
   const {
     selectedFont,
-    text,
-    emptyPaper,
-    worksheetType,
-    specificLetters,
-    alphabetCase,
     paperSize,
     multiPageMode,
     pages
@@ -32,27 +27,8 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
   }, [multiPageMode, pages.length]);
   
   // Get total pages for preview
-  const totalPreviewPages = multiPageMode ? pages.length : 1;
-  
-  // Get current page preferences
-  const getCurrentPagePreferences = (): WorksheetPreferences => {
-    if (multiPageMode && pages[currentPreviewPage]) {
-      return {
-        ...preferences,
-        worksheetType: pages[currentPreviewPage].worksheetType,
-        text: pages[currentPreviewPage].text,
-        specificLetters: pages[currentPreviewPage].specificLetters,
-        alphabetCase: pages[currentPreviewPage].alphabetCase,
-        includeNumbers: pages[currentPreviewPage].includeNumbers,
-        includeSymbols: pages[currentPreviewPage].includeSymbols,
-        emptyPaper: pages[currentPreviewPage].emptyPaper,
-        repeatText: pages[currentPreviewPage].repeatText
-      };
-    }
-    return preferences;
-  };
-  
-  const currentPagePrefs = getCurrentPagePreferences();
+  const totalPreviewPages = multiPageMode ? getTotalPages(preferences) : 1;
+  const currentPagePrefs = getEffectivePage(preferences, currentPreviewPage);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -73,14 +49,13 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
     ctx.scale(scale, scale);
     
     // Draw current page with page number
-    drawPage(
-      ctx, 
-      PAPER_SIZES[paperSize].width, 
-      PAPER_SIZES[paperSize].height, 
-      currentPagePrefs,
-      currentPreviewPage + 1,
-      totalPreviewPages
-    );
+    renderWorksheetPage({
+      ctx,
+      paper: PAPER_SIZES[paperSize],
+      page: currentPagePrefs,
+      pageNumber: currentPreviewPage + 1,
+      totalPages: totalPreviewPages
+    });
     
     ctx.restore();
   }, [currentPagePrefs, fontsLoaded, paperSize, currentPreviewPage, totalPreviewPages, preferences.lineSpacingPreset, preferences.customLineSpacing]);
@@ -103,6 +78,7 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
   };
 
   const previewText = getPreviewText();
+  const showEmptyTextMessage = !currentPagePrefs.text && !currentPagePrefs.emptyPaper && currentPagePrefs.worksheetType === 'text';
   
   const goToPreviousPage = () => {
     if (currentPreviewPage > 0) {
@@ -168,14 +144,15 @@ export const WorksheetPreview: React.FC<WorksheetPreviewProps> = ({ preferences,
       )}
       
       <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-soft">
-        <canvas
-          ref={canvasRef}
-          className="w-full h-auto"
-        />
-        {!text && !emptyPaper && worksheetType === 'text' && (
+        {showEmptyTextMessage ? (
           <div className="flex items-center justify-center h-64 text-gray-400 text-sm p-4 text-center">
-            {worksheetType === 'text' ? 'Enter text (or select empty paper mode) to see a preview' : 'Select worksheet options to see a preview'}
+            Enter text (or select empty paper mode) to see a preview
           </div>
+        ) : (
+          <canvas
+            ref={canvasRef}
+            className="w-full h-auto"
+          />
         )}
       </div>
       

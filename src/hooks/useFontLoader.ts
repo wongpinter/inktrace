@@ -26,7 +26,6 @@ export const useFontLoader = (selectedFont: string, fontCategory: FontCategory, 
     link.onload = () => {
       setFontsLoaded(prev => new Set(prev).add(fontName));
     };
-    setFontsLoaded(prev => new Set(prev).add(fontName));
   };
 
   useEffect(() => {

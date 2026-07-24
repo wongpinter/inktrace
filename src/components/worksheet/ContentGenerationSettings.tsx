@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { WorksheetPreferences, SightWordList, WordPattern, DifficultyLevel } from '@/types/worksheet';
-import { DOLCH_SIGHT_WORDS, FRY_SIGHT_WORDS, WORD_PATTERNS, SENTENCE_TEMPLATES, TEMPLATE_WORDS, COMMON_NAMES, DIFFICULTY_LEVELS } from '@/constants/contentGeneration';
+import { WORD_PATTERNS, SENTENCE_TEMPLATES, COMMON_NAMES, DIFFICULTY_LEVELS } from '@/constants/contentGeneration';
 import { exportWordList, importWordList } from '@/utils/contentGeneration';
+import { generateNamePracticeText, generateRandomWordText, generateSentenceText, getPatternText, getSightWordText, parseWordListInput } from '@/utils/practiceContent';
 import { Sparkles, List, FileText, User, Shuffle, Download, Upload } from 'lucide-react';
 
 interface ContentGenerationSettingsProps {
@@ -25,52 +26,29 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
   };
 
   const generateFromSightWords = (list: SightWordList) => {
-    let words: string[] = [];
-    
-    if (list.startsWith('dolch-')) {
-      const level = list.replace('dolch-', '') as keyof typeof DOLCH_SIGHT_WORDS;
-      words = DOLCH_SIGHT_WORDS[level] || [];
-    } else if (list.startsWith('fry-')) {
-      const level = list.replace('fry-', '') as keyof typeof FRY_SIGHT_WORDS;
-      words = FRY_SIGHT_WORDS[level] || [];
-    }
-    
-    updatePreference('text', words.join(' '));
+    updatePreference('text', getSightWordText(list));
     updateContentGeneration({ sightWordList: list });
   };
 
   const generateFromPattern = (pattern: WordPattern) => {
-    const words = WORD_PATTERNS[pattern]?.examples || [];
-    updatePreference('text', words.join(' '));
+    updatePreference('text', getPatternText(pattern));
     updateContentGeneration({ wordPattern: pattern });
   };
 
   const generateFromTemplate = (template: string) => {
-    const sentences: string[] = [];
-    for (let i = 0; i < 5; i++) {
-      let sentence = template;
-      sentence = sentence.replace('{adjective}', TEMPLATE_WORDS.adjective[Math.floor(Math.random() * TEMPLATE_WORDS.adjective.length)]);
-      sentence = sentence.replace('{noun}', TEMPLATE_WORDS.noun[Math.floor(Math.random() * TEMPLATE_WORDS.noun.length)]);
-      sentence = sentence.replace('{verb}', TEMPLATE_WORDS.verb[Math.floor(Math.random() * TEMPLATE_WORDS.verb.length)]);
-      sentence = sentence.replace('{adverb}', TEMPLATE_WORDS.adverb[Math.floor(Math.random() * TEMPLATE_WORDS.adverb.length)]);
-      sentence = sentence.replace('{place}', TEMPLATE_WORDS.place[Math.floor(Math.random() * TEMPLATE_WORDS.place.length)]);
-      sentence = sentence.replace('{name}', TEMPLATE_WORDS.name[Math.floor(Math.random() * TEMPLATE_WORDS.name.length)]);
-      sentences.push(sentence);
-    }
-    updatePreference('text', sentences.join(' '));
+    updatePreference('text', generateSentenceText(template));
     updateContentGeneration({ useSentenceTemplate: true, sentenceTemplate: template });
   };
 
   const generateNamePractice = (name: string) => {
     if (!name.trim()) return;
-    const repeated = Array(10).fill(name.trim()).join(' ');
-    updatePreference('text', repeated);
+    updatePreference('text', generateNamePracticeText(name));
     updateContentGeneration({ useNamePractice: true, practiceName: name.trim() });
   };
 
   const addCustomWords = () => {
     if (!customWordInput.trim()) return;
-    const words = customWordInput.split(/[\s,]+/).filter(w => w.length > 0);
+    const words = parseWordListInput(customWordInput);
     const newList = [...preferences.contentGeneration.customWordList, ...words];
     updateContentGeneration({ customWordList: newList });
     updatePreference('text', newList.join(' '));
@@ -86,18 +64,7 @@ export const ContentGenerationSettings: React.FC<ContentGenerationSettingsProps>
   };
 
   const generateRandomWords = (difficulty: DifficultyLevel, count: number) => {
-    const config = DIFFICULTY_LEVELS[difficulty];
-    const allWords: string[] = [];
-    
-    config.patterns.forEach(pattern => {
-      const patternWords = WORD_PATTERNS[pattern as WordPattern]?.examples || [];
-      allWords.push(...patternWords);
-    });
-    
-    const shuffled = allWords.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, count);
-    
-    updatePreference('text', selected.join(' '));
+    updatePreference('text', generateRandomWordText(difficulty, count));
     updateContentGeneration({ randomWordDifficulty: difficulty, randomWordCount: count });
   };
 
