@@ -290,6 +290,14 @@ const SettingsGuide: React.FC = () => {
             <Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors">
               Home
             </Link>
+            <a
+              href="https://github.com/wongpinter/inktrace/blob/main/docs/wiki/WIKI_INDEX.md"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-gray-600 hover:text-indigo-600 transition-colors"
+            >
+              Wiki
+            </a>
             <Link
               to="/builder"
               className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
