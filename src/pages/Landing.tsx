@@ -56,14 +56,9 @@ const Landing: React.FC = () => {
           <Link to="/settings-guide" className="text-sm text-gray-600 hover:text-indigo-600 transition-colors">
             Settings guide
           </Link>
-          <a
-            href="https://github.com/wongpinter/inktrace/blob/main/docs/wiki/WIKI_INDEX.md"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-sm text-gray-600 hover:text-indigo-600 transition-colors"
-          >
+          <Link to="/wiki" className="text-sm text-gray-600 hover:text-indigo-600 transition-colors">
             Wiki
-          </a>
+          </Link>
           <Link
             to="/builder"
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
