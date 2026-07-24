@@ -1,0 +1,35 @@
+site_name: InkTrace Settings Wiki
+site_description: Comprehensive settings reference for InkTrace handwriting worksheet generator
+site_author: wongpinter
+repo_url: https://github.com/wongpinter/inktrace
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - toc.follow
+    - search.suggest
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Document: DOCUMENT.md
+  - Pages: PAGES.md
+  - Content: CONTENT.md
+  - Text: TEXT.md
+  - Guidelines: GUIDELINES.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+
+copyright: Copyright &copy; 2026 InkTrace

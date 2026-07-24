@@ -290,9 +290,9 @@ const SettingsGuide: React.FC = () => {
             <Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors">
               Home
             </Link>
-            <Link to="/wiki" className="text-gray-600 hover:text-indigo-600 transition-colors">
+            <a href="/wiki/" className="text-gray-600 hover:text-indigo-600 transition-colors">
               Wiki
-            </Link>
+            </a>
             <Link
               to="/builder"
               className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
