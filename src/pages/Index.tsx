@@ -114,6 +114,9 @@ const HandwritingWorksheetGenerator = () => {
             </div>
             
             <div className="flex items-center gap-2 sm:gap-3 ml-auto flex-wrap justify-end">
+              <Link to="/settings-guide" className="text-sm hidden sm:block text-gray-600 hover:text-indigo-600 transition-colors px-1">
+                Guide
+              </Link>
               <button
                 onClick={resetPreferences}
                 className="px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
