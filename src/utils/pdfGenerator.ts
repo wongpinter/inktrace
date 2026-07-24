@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import { PAPER_SIZES, PRINT_QUALITY_SETTINGS } from '@/constants/worksheet';
 import { WorksheetPreferences } from '@/types/worksheet';
 import { getEffectivePage, getTotalPages } from './pageSet';
@@ -9,7 +8,7 @@ type PrintCanvasContext = CanvasRenderingContext2D & {
   fontSmooth?: string;
 };
 
-export const generatePDF = (preferences: WorksheetPreferences) => {
+export const generatePDF = async (preferences: WorksheetPreferences) => {
   const { paperSize, printQuality } = preferences;
   const size = PAPER_SIZES[paperSize];
 
@@ -17,6 +16,7 @@ export const generatePDF = (preferences: WorksheetPreferences) => {
   const qualitySettings = PRINT_QUALITY_SETTINGS[printQuality || 'high'];
   const PRINT_SCALE = qualitySettings.scale;
 
+  const { jsPDF } = await import('jspdf');
   const pdf = new jsPDF({
     orientation: size.width > size.height ? 'landscape' : 'portrait',
     unit: 'px',

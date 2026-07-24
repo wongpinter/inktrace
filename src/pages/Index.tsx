@@ -61,7 +61,7 @@ const HandwritingWorksheetGenerator = () => {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
       
-      generatePDF(preferences);
+      await generatePDF(preferences);
       
       // Keep showing for a moment after completion
       await new Promise(resolve => setTimeout(resolve, 500));
