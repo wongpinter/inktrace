@@ -1,6 +1,7 @@
 import React from 'react';
 import { WorksheetPreferences, PaperSize, PrintQuality } from '@/types/worksheet';
 import { PAPER_SIZES, PRINT_QUALITY_SETTINGS } from '@/constants/worksheet';
+import { createPageFromPreferences } from '@/utils/pageSet';
 
 interface DocumentSetupSettingsProps {
   preferences: WorksheetPreferences;
@@ -11,6 +12,13 @@ export const DocumentSetupSettings: React.FC<DocumentSetupSettingsProps> = ({
   preferences, 
   updatePreference 
 }) => {
+  const updateMultiPageMode = (enabled: boolean) => {
+    if (enabled && preferences.pages.length === 0) {
+      updatePreference('pages', [createPageFromPreferences(preferences)]);
+    }
+    updatePreference('multiPageMode', enabled);
+  };
+
   return (
     <div className="space-y-4">
       <div>
@@ -48,19 +56,21 @@ export const DocumentSetupSettings: React.FC<DocumentSetupSettingsProps> = ({
         </p>
       </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Number of Pages: {preferences.pageCount}
-        </label>
-        <input
-          type="range"
-          min="1"
-          max="10"
-          value={preferences.pageCount}
-          onChange={(e) => updatePreference('pageCount', Number(e.target.value))}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-        />
-      </div>
+      {!preferences.multiPageMode && (
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Number of Pages: {preferences.pageCount}
+          </label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={preferences.pageCount}
+            onChange={(e) => updatePreference('pageCount', Number(e.target.value))}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
         <input
@@ -80,7 +90,7 @@ export const DocumentSetupSettings: React.FC<DocumentSetupSettingsProps> = ({
           type="checkbox"
           id="multiPageMode"
           checked={preferences.multiPageMode}
-          onChange={(e) => updatePreference('multiPageMode', e.target.checked)}
+          onChange={(e) => updateMultiPageMode(e.target.checked)}
           className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 flex-shrink-0"
         />
         <label htmlFor="multiPageMode" className="text-sm font-medium text-indigo-900 cursor-pointer">

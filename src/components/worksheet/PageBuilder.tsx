@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, Trash2, Copy, GripVertical } from 'lucide-react';
 import { PageConfig, WorksheetType, AlphabetCase, WorksheetPreferences } from '@/types/worksheet';
-import { createBlankPage, createPageFromPreferences } from '@/utils/pageSet';
+import { createBlankPage } from '@/utils/pageSet';
 
 interface PageBuilderProps {
   preferences: WorksheetPreferences;
@@ -9,7 +9,7 @@ interface PageBuilderProps {
 }
 
 export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePreference }) => {
-  const { multiPageMode, pages } = preferences;
+  const { pages } = preferences;
 
   const addPage = () => {
     updatePreference('pages', [...pages, createBlankPage()]);
@@ -49,37 +49,10 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePre
     updatePreference('pages', newPages);
   };
 
-  const toggleMultiPageMode = (enabled: boolean) => {
-    if (enabled && pages.length === 0) {
-      // Initialize with one page from current settings
-      updatePreference('pages', [createPageFromPreferences(preferences)]);
-    }
-    updatePreference('multiPageMode', enabled);
-  };
-
   return (
     <div className="space-y-4">
       <div className="space-y-4">
-        {/* Toggle Multi-Page Mode */}
-        <div className="flex items-center gap-3 p-3 bg-violet-50 rounded-lg border border-violet-100">
-          <input
-            type="checkbox"
-            id="multiPageMode"
-            checked={multiPageMode}
-            onChange={(e) => toggleMultiPageMode(e.target.checked)}
-            className="w-4 h-4 text-violet-600 rounded focus:ring-violet-500 flex-shrink-0"
-          />
-          <label htmlFor="multiPageMode" className="text-sm font-medium text-gray-700 cursor-pointer">
-            Enable Multi-Page Mode
-            <span className="block text-xs font-normal text-gray-500 mt-0.5">
-              Create different content for each page
-            </span>
-          </label>
-        </div>
-
-        {multiPageMode && (
-          <>
-            {/* Page List */}
+        {/* Page List */}
             <div className="space-y-3">
               {pages.map((page, index) => (
                 <div
@@ -219,8 +192,6 @@ export const PageBuilder: React.FC<PageBuilderProps> = ({ preferences, updatePre
                 Global settings (font, size, guidelines) apply to all pages.
               </p>
             </div>
-          </>
-        )}
       </div>
     </div>
   );

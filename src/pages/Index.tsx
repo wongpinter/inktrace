@@ -21,7 +21,7 @@ import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
 import { SETTINGS_INFO } from '@/constants/settingsInfo';
-import { FileText, Type, Settings, Sparkles, Layout, Ruler, Palette, AlignLeft, Eye, Zap } from 'lucide-react';
+import { FileText, Type, Settings, Layout, Ruler, Zap } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -169,7 +169,7 @@ const HandwritingWorksheetGenerator = () => {
                         id: 'document',
                         title: (
                           <span className="flex items-center">
-                            Document Setup
+                            Document
                             <InfoTooltip {...SETTINGS_INFO.document} />
                           </span>
                         ),
@@ -183,7 +183,7 @@ const HandwritingWorksheetGenerator = () => {
                       },
                       {
                         id: 'multipage',
-                        title: 'Multi-Page Builder',
+                        title: 'Pages',
                         icon: <Layout className="w-5 h-5" />,
                         content: preferences.multiPageMode ? (
                           <PageBuilder
@@ -204,136 +204,101 @@ const HandwritingWorksheetGenerator = () => {
                         ),
                         icon: <FileText className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
-                          <ContentSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
+                          <div className="space-y-6">
+                            <ContentSettings
+                              preferences={preferences}
+                              updatePreference={updatePreference}
+                            />
+                            {!preferences.emptyPaper && (
+                              <div className="space-y-3 border-t border-gray-200 pt-4">
+                                <h3 className="text-sm font-semibold text-gray-700">Generate practice content</h3>
+                                <ContentGenerationSettings
+                                  preferences={preferences}
+                                  updatePreference={updatePreference}
+                                />
+                              </div>
+                            )}
+                          </div>
                         ) : (
-                          <p className="text-sm text-gray-500">Content is managed in Multi-Page Builder</p>
+                          <p className="text-sm text-gray-500">Content is managed in Pages.</p>
                         )
                       },
                       {
-                        id: 'contentgen',
+                        id: 'text',
                         title: (
                           <span className="flex items-center">
-                            Content Generation
-                            <InfoTooltip {...SETTINGS_INFO.generation} />
-                          </span>
-                        ),
-                        icon: <Sparkles className="w-5 h-5" />,
-                        content: !preferences.multiPageMode ? (
-                          <ContentGenerationSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        ) : (
-                          <p className="text-sm text-gray-500">Content generation not available in Multi-Page mode</p>
-                        )
-                      },
-                      {
-                        id: 'font',
-                        title: (
-                          <span className="flex items-center">
-                            Font & Typography
-                            <InfoTooltip {...SETTINGS_INFO.font} />
+                            Text
+                            <InfoTooltip {...SETTINGS_INFO.text} />
                           </span>
                         ),
                         icon: <Type className="w-5 h-5" />,
-                        content: !preferences.multiPageMode ? (
-                          <FontTypographySettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                            searchQuery={searchQuery}
-                            filteredFonts={filteredFonts}
-                            onSearchChange={setSearchQuery}
-                            onFontHover={loadFont}
-                          />
+                        content: !preferences.multiPageMode && !preferences.emptyPaper ? (
+                          <div className="space-y-6">
+                            <div className="space-y-3">
+                              <h3 className="text-sm font-semibold text-gray-700">Font and typography</h3>
+                              <FontTypographySettings
+                                preferences={preferences}
+                                updatePreference={updatePreference}
+                                searchQuery={searchQuery}
+                                filteredFonts={filteredFonts}
+                                onSearchChange={setSearchQuery}
+                                onFontHover={loadFont}
+                              />
+                            </div>
+                            <div className="space-y-3 border-t border-gray-200 pt-4">
+                              <h3 className="text-sm font-semibold text-gray-700">Trace appearance</h3>
+                              <TextAppearanceSettings
+                                preferences={preferences}
+                                updatePreference={updatePreference}
+                              />
+                            </div>
+                            <div className="space-y-3 border-t border-gray-200 pt-4">
+                              <h3 className="text-sm font-semibold text-gray-700">Spacing</h3>
+                              <TextSpacingSettings
+                                preferences={preferences}
+                                updatePreference={updatePreference}
+                              />
+                            </div>
+                          </div>
                         ) : (
-                          <p className="text-sm text-gray-500">Font settings not available in Multi-Page mode</p>
+                          <p className="text-sm text-gray-500">Text settings are hidden for empty paper and managed globally outside multi-page content.</p>
                         )
                       },
                       {
-                        id: 'appearance',
+                        id: 'guidelines',
                         title: (
                           <span className="flex items-center">
-                            Text Appearance
-                            <InfoTooltip {...SETTINGS_INFO.appearance} />
-                          </span>
-                        ),
-                        icon: <Eye className="w-5 h-5" />,
-                        content: !preferences.multiPageMode ? (
-                          <TextAppearanceSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        ) : (
-                          <p className="text-sm text-gray-500">Text appearance not available in Multi-Page mode</p>
-                        )
-                      },
-                      {
-                        id: 'spacing',
-                        title: (
-                          <span className="flex items-center">
-                            Text Spacing
-                            <InfoTooltip {...SETTINGS_INFO.spacing} />
-                          </span>
-                        ),
-                        icon: <AlignLeft className="w-5 h-5" />,
-                        content: !preferences.multiPageMode ? (
-                          <TextSpacingSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        ) : (
-                          <p className="text-sm text-gray-500">Text spacing not available in Multi-Page mode</p>
-                        )
-                      },
-                      {
-                        id: 'linespacing',
-                        title: (
-                          <span className="flex items-center">
-                            Line Spacing
-                            <InfoTooltip {...SETTINGS_INFO.lineSpacing} />
+                            Guidelines
+                            <InfoTooltip {...SETTINGS_INFO.guidelines} />
                           </span>
                         ),
                         icon: <Ruler className="w-5 h-5" />,
                         content: (
-                          <LineSpacingSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        )
-                      },
-                      {
-                        id: 'guidelinelayout',
-                        title: (
-                          <span className="flex items-center">
-                            Guideline Layout
-                            <InfoTooltip {...SETTINGS_INFO.guidelineLayout} />
-                          </span>
-                        ),
-                        icon: <Ruler className="w-5 h-5" />,
-                        content: (
-                          <GuidelineLayoutSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
-                        )
-                      },
-                      {
-                        id: 'guidelineappearance',
-                        title: (
-                          <span className="flex items-center">
-                            Guideline Appearance
-                            <InfoTooltip {...SETTINGS_INFO.guidelineAppearance} />
-                          </span>
-                        ),
-                        icon: <Palette className="w-5 h-5" />,
-                        content: (
-                          <GuidelineAppearanceSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
+                          <div className="space-y-6">
+                            <div className="space-y-3">
+                              <h3 className="text-sm font-semibold text-gray-700">Line spacing</h3>
+                              <LineSpacingSettings
+                                preferences={preferences}
+                                updatePreference={updatePreference}
+                              />
+                            </div>
+                            <div className="space-y-3 border-t border-gray-200 pt-4">
+                              <h3 className="text-sm font-semibold text-gray-700">Layout</h3>
+                              <GuidelineLayoutSettings
+                                preferences={preferences}
+                                updatePreference={updatePreference}
+                              />
+                            </div>
+                            {preferences.showGuides && (
+                              <div className="space-y-3 border-t border-gray-200 pt-4">
+                                <h3 className="text-sm font-semibold text-gray-700">Appearance</h3>
+                                <GuidelineAppearanceSettings
+                                  preferences={preferences}
+                                  updatePreference={updatePreference}
+                                />
+                              </div>
+                            )}
+                          </div>
                         )
                       }
                     ]}

@@ -20,104 +20,47 @@ export const SETTINGS_INFO: Record<string, SettingsCategoryInfo> = {
     ]
   },
   document: {
-    title: 'Document Setup',
-    description: 'Configure the basic document properties including paper size, page count, and print quality. These settings affect the overall layout and output quality of your worksheet.',
+    title: 'Document',
+    description: 'Configure worksheet document properties: paper, print quality, page count, page numbers, and multi-page mode.',
     changes: [
       'Paper size (A4, Letter, Legal, A5)',
-      'Number of pages to generate',
+      'Single-page page count',
       'Print quality (150, 300, 600 DPI)',
       'Page numbers visibility',
       'Multi-page mode toggle'
     ]
   },
   content: {
-    title: 'Content Settings',
-    description: 'Define what text or characters appear on your worksheet. Choose between custom text, specific letters, full alphabet, or numbers and symbols.',
+    title: 'Content',
+    description: 'Define what appears on the worksheet, manually or through generated practice content.',
     changes: [
       'Worksheet type (text, letters, alphabet, numbers)',
-      'Custom text input',
-      'Specific letters to practice',
-      'Alphabet case (uppercase, lowercase, both)',
-      'Include numbers and symbols',
+      'Manual text or letters',
       'Empty paper mode',
-      'Repeat text on multiple lines'
+      'Repeat text on multiple lines',
+      'Sight words, word patterns, sentence templates, names, custom word lists, and random words'
     ]
   },
-  generation: {
-    title: 'Content Generation',
-    description: 'Automatically generate practice content using sight words, word patterns, or custom word lists. Perfect for creating varied practice materials.',
+  text: {
+    title: 'Text',
+    description: 'Control how practice text looks and behaves for tracing.',
     changes: [
-      'Sight word lists (Dolch, Fry)',
-      'Word patterns (CVC, CVCE, etc.)',
-      'Custom word lists',
-      'Name practice mode',
-      'Sentence templates',
-      'Random word generation'
+      'Font family, category, search, and preview',
+      'Font size and text case',
+      'Trace style and opacity',
+      'Starting dots and stroke arrows',
+      'Letter spacing, word spacing, character width, and practice lines'
     ]
   },
-  font: {
-    title: 'Font & Typography',
-    description: 'Select the font style for your worksheet. Educational fonts are designed specifically for handwriting practice, while other categories offer variety.',
+  guidelines: {
+    title: 'Guidelines',
+    description: 'Configure handwriting guide spacing, layout, margins, and visual appearance in one place.',
     changes: [
-      'Font family selection',
-      'Font category filter',
-      'Font search',
-      'Font preview'
-    ]
-  },
-  appearance: {
-    title: 'Text Appearance',
-    description: 'Control how the text looks on the worksheet. Adjust opacity for tracing practice or choose different trace styles for varied difficulty.',
-    changes: [
-      'Text opacity (0-100%)',
-      'Trace style (dotted, dashed, outline, solid)',
-      'Starting dots for letter formation',
-      'Stroke direction arrows'
-    ]
-  },
-  spacing: {
-    title: 'Text Spacing',
-    description: 'Fine-tune the spacing between letters and words, and adjust character width. These settings help accommodate different handwriting styles and motor skill levels.',
-    changes: [
-      'Letter spacing (-5 to 20px)',
-      'Word spacing (0 to 20px)',
-      'Character width (condensed, normal, expanded)',
-      'Practice lines per set (1-5)'
-    ]
-  },
-  lineSpacing: {
-    title: 'Line Spacing',
-    description: 'Set the baseline-to-baseline distance using educational standards. Different grade levels require different spacing to support motor skill development.',
-    changes: [
-      'Kindergarten spacing (19mm)',
-      'Grades 1-3 spacing (12.7mm)',
-      'Grades 4-6 spacing (8.7mm)',
-      'Narrow ruled spacing (6.4mm)',
-      'Custom spacing (6-25mm)'
-    ]
-  },
-  guidelineLayout: {
-    title: 'Guideline Layout',
-    description: 'Choose the guideline structure that best supports your students. Different styles provide varying levels of support for letter formation.',
-    changes: [
+      'Line spacing presets and custom spacing',
       'Guideline style (standard, elementary, dotted, two-line)',
-      'Show/hide guidelines',
-      'Extend to page margins',
-      'Show margin boundaries',
-      'Text vertical alignment'
-    ]
-  },
-  guidelineAppearance: {
-    title: 'Guideline Appearance',
-    description: 'Customize how guidelines look. Use colors to help students distinguish between different lines, or adjust thickness and opacity for visual clarity.',
-    changes: [
-      'Guideline color style (default, rainbow, pastel, monochrome)',
-      'Custom colors for each line',
-      'Guideline thickness',
-      'Guideline opacity',
-      'Dashed guidelines option',
-      'Emphasize baseline',
-      'Baseline thickness'
+      'Show/hide guidelines, margin lines, and full-margin guides',
+      'Text vertical alignment',
+      'Guideline colors, thickness, opacity, dashed pattern, and baseline emphasis'
     ]
   }
 };
