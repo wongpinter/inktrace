@@ -40,31 +40,57 @@ const features = [
   }
 ];
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'InkTrace',
+  url: 'https://inktrace.wongpinter.com',
+  description: 'Create beautiful handwriting practice worksheets with customizable fonts, guidelines, and PDF export.',
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Web',
+  browserRequirements: 'Requires JavaScript',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  author: {
+    '@type': 'Person',
+    name: 'wongpinter',
+  },
+};
+
 const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-900">
-      <header className="px-6 py-5 border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <header className="px-6 py-4 border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
               </svg>
             </div>
-            <span className="text-xl font-semibold">InkTrace</span>
+            <span className="text-lg sm:text-xl font-bold tracking-tight text-gray-900">InkTrace</span>
           </Link>
-          <Link to="/settings-guide" className="text-sm text-gray-600 hover:text-indigo-600 transition-colors">
-            Settings guide
-          </Link>
-          <a href="/wiki/" className="text-sm text-gray-600 hover:text-indigo-600 transition-colors">
-            Wiki
-          </a>
-          <Link
-            to="/builder"
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
-          >
-            Open builder
-          </Link>
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <Link to="/settings-guide" className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors hidden sm:inline-block">
+              Settings guide
+            </Link>
+            <a href="/wiki/" className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors hidden sm:inline-block">
+              Wiki
+            </a>
+            <Link
+              to="/builder"
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm hover:shadow transition-all duration-200"
+            >
+              Open builder
+            </Link>
+          </nav>
         </div>
       </header>
 
@@ -74,7 +100,7 @@ const Landing: React.FC = () => {
             Free handwriting worksheet generator
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-900">
-            Create beautiful handwriting practice sheets in your browser.
+            Free Handwriting Worksheet Generator — Create practice sheets in your browser.
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-gray-600 leading-relaxed">
             InkTrace helps teachers, parents, and students design custom handwriting worksheets
@@ -113,7 +139,7 @@ const Landing: React.FC = () => {
                 key={feature.title}
                 className="p-6 border border-gray-200 rounded-xl bg-gray-50 hover:border-indigo-300 transition-colors"
               >
-                <div className="mb-4">{feature.icon}</div>
+                <div className="mb-4" aria-hidden="true">{feature.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
                 <p className="mt-2 text-sm text-gray-600 leading-relaxed">{feature.description}</p>
               </div>

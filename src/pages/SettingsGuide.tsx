@@ -274,28 +274,26 @@ const SettingsGuide: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <header className="px-6 py-5 border-b border-gray-200 bg-white sticky top-0 z-10">
+      <header className="px-6 py-4 border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-              </div>
-              <span className="text-lg font-semibold">InkTrace</span>
-            </Link>
-          </div>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </div>
+            <span className="text-lg sm:text-xl font-bold tracking-tight text-gray-900">InkTrace</span>
+          </Link>
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <Link to="/" className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors hidden sm:inline-block">
               Home
             </Link>
-            <a href="/wiki/" className="text-gray-600 hover:text-indigo-600 transition-colors">
+            <a href="/wiki/" className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors hidden sm:inline-block">
               Wiki
             </a>
             <Link
               to="/builder"
-              className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm hover:shadow transition-all duration-200"
             >
               Open builder
             </Link>
