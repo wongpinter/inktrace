@@ -18,11 +18,13 @@ import { LineSpacingSettings } from '@/components/worksheet/LineSpacingSettings'
 import { GuidelineLayoutSettings } from '@/components/worksheet/GuidelineLayoutSettings';
 import { GuidelineAppearanceSettings } from '@/components/worksheet/GuidelineAppearanceSettings';
 import { PresetSelector } from '@/components/worksheet/PresetSelector';
+import { GuidedRecipes } from '@/components/worksheet/GuidedRecipes';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { AccordionNav } from '@/components/ui/AccordionNav';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
+import { SettingsHint } from '@/components/ui/SettingsHint';
 import { SETTINGS_INFO } from '@/constants/settingsInfo';
-import { FileText, Type, Settings, Layout, Ruler, Zap } from 'lucide-react';
+import { FileText, Type, Settings, Sparkles, Layout, Ruler, Zap } from 'lucide-react';
 
 const HandwritingWorksheetGenerator = () => {
   const {
@@ -154,6 +156,24 @@ const HandwritingWorksheetGenerator = () => {
                     defaultOpen="presets"
                     sections={[
                       {
+                        id: 'guided',
+                        title: (
+                          <span className="flex items-center">
+                            Get started
+                            <InfoTooltip {...SETTINGS_INFO.guided} />
+                          </span>
+                        ),
+                        icon: <Sparkles className="w-5 h-5" />,
+                        content: (
+                          <div className="space-y-4">
+                            <p className="text-xs text-gray-500">
+                              Tell us who is using the worksheet and we will set everything up.
+                            </p>
+                            <GuidedRecipes onSelectPreset={handleSelectPreset} />
+                          </div>
+                        )
+                      },
+                      {
                         id: 'presets',
                         title: (
                           <span className="flex items-center">
@@ -178,10 +198,13 @@ const HandwritingWorksheetGenerator = () => {
                         ),
                         icon: <Settings className="w-5 h-5" />,
                         content: (
-                          <DocumentSetupSettings
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
+                          <div className="space-y-3">
+                            <SettingsHint>Paper, page count, and print quality live here. Multi-page mode lets you give each page its own content.</SettingsHint>
+                            <DocumentSetupSettings
+                              preferences={preferences}
+                              updatePreference={updatePreference}
+                            />
+                          </div>
                         )
                       },
                       {
@@ -189,10 +212,13 @@ const HandwritingWorksheetGenerator = () => {
                         title: 'Pages',
                         icon: <Layout className="w-5 h-5" />,
                         content: preferences.multiPageMode ? (
-                          <PageBuilder
-                            preferences={preferences}
-                            updatePreference={updatePreference}
-                          />
+                          <div className="space-y-3">
+                            <SettingsHint>Each page can have its own content. Reorder, duplicate, or remove pages. Other settings apply to all pages.</SettingsHint>
+                            <PageBuilder
+                              preferences={preferences}
+                              updatePreference={updatePreference}
+                            />
+                          </div>
                         ) : (
                           <p className="text-sm text-gray-500">Enable Multi-Page Mode in Document Setup to use this feature</p>
                         )
@@ -208,6 +234,7 @@ const HandwritingWorksheetGenerator = () => {
                         icon: <FileText className="w-5 h-5" />,
                         content: !preferences.multiPageMode ? (
                           <div className="space-y-6">
+                            <SettingsHint>Choose what practice content goes on the page. Switch between manual text and generated practice sets below.</SettingsHint>
                             <ContentSettings
                               preferences={preferences}
                               updatePreference={updatePreference}
@@ -237,6 +264,7 @@ const HandwritingWorksheetGenerator = () => {
                         icon: <Type className="w-5 h-5" />,
                         content: !preferences.multiPageMode && !preferences.emptyPaper ? (
                           <div className="space-y-6">
+                            <SettingsHint>Choose a font, set the size, and pick how the practice text should look. Letter spacing affects readability for younger students.</SettingsHint>
                             <div className="space-y-3">
                               <h3 className="text-sm font-semibold text-gray-700">Font and typography</h3>
                               <FontTypographySettings
@@ -278,6 +306,7 @@ const HandwritingWorksheetGenerator = () => {
                         icon: <Ruler className="w-5 h-5" />,
                         content: (
                           <div className="space-y-6">
+                            <SettingsHint>Set line spacing, guideline style, colors, and baseline emphasis. Guidelines help students sit text on the right line.</SettingsHint>
                             <div className="space-y-3">
                               <h3 className="text-sm font-semibold text-gray-700">Line spacing</h3>
                               <LineSpacingSettings

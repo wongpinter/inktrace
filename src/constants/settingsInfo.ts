@@ -7,6 +7,15 @@ export interface SettingsCategoryInfo {
 }
 
 export const SETTINGS_INFO: Record<string, SettingsCategoryInfo> = {
+  guided: {
+    title: 'Get started',
+    description: 'Tell us who is using the worksheet and we will set font, spacing, and trace style for you. You can fine-tune anything afterwards.',
+    changes: [
+      'Choose tracing, letter formation, or cursive fluency',
+      'Apply a guided set of settings in one click',
+      'Keep your current text or start fresh'
+    ]
+  },
   presets: {
     title: 'Quick Start Presets',
     description: 'Pre-configured templates optimized for different grade levels and use cases. Click any preset to instantly apply all its settings. You can customize individual settings afterwards.',
