@@ -94,47 +94,48 @@ const HandwritingWorksheetGenerator = () => {
         }
       `}</style>
       
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 overflow-x-hidden">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="max-w-[1600px] mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+          <div className="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900">InkTrace</h1>
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">InkTrace</h1>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 ml-auto flex-wrap justify-end">
               <button
                 onClick={resetPreferences}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
+                className="px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-                Reset
+                <span className="hidden sm:inline">Reset</span>
               </button>
               <button
                 onClick={savePreferences}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
+                className="px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                 </svg>
-                Save
+                <span className="hidden sm:inline">Save</span>
               </button>
               <button
                 onClick={handleGeneratePDF}
                 disabled={isDownloadDisabled}
-                className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
+                className="px-3 sm:px-6 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
+                aria-label="Download PDF"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download PDF
+                <span className="hidden sm:inline">Download PDF</span>
               </button>
             </div>
           </div>
@@ -144,7 +145,7 @@ const HandwritingWorksheetGenerator = () => {
           <div className="grid lg:grid-cols-[380px_1fr] gap-0 lg:h-[calc(100vh-73px)]">
             {/* Left Sidebar: Accordion Navigation */}
             <div className="bg-white border-r border-gray-200 lg:h-full lg:overflow-hidden">
-              <div className="settings-sidebar h-full overflow-y-auto overflow-x-hidden p-6">
+              <div className="settings-sidebar h-full overflow-y-auto overflow-x-hidden p-4 sm:p-6">
                 <div className="space-y-3 pb-6">
                   <AccordionNav
                     defaultOpen="presets"
@@ -342,7 +343,7 @@ const HandwritingWorksheetGenerator = () => {
             </div>
 
             {/* Right Side: Preview */}
-            <div className="bg-gray-100 p-8 lg:h-full lg:overflow-auto">
+            <div className="bg-gray-100 p-4 sm:p-8 lg:h-full lg:overflow-auto">
               <WorksheetPreview
                 preferences={preferences}
                 fontsLoaded={fontsLoaded}

@@ -26,18 +26,18 @@ export const PresetSelector: React.FC<PresetSelectorProps> = ({ onSelectPreset }
         Quick start templates for common use cases
       </p>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {Object.entries(WORKSHEET_PRESETS).map(([key, preset]) => (
           <button
             key={key}
             onClick={() => onSelectPreset(preset.preferences)}
-            className="flex flex-col items-center p-3 text-center border border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-all group"
+            className="flex flex-col items-center p-3 text-center border border-gray-200 rounded-lg hover:border-indigo-400 hover:bg-indigo-50 transition-all group min-w-0"
             title={preset.description}
           >
             <div className="mb-2 group-hover:scale-110 transition-transform">
               {presetIcons[key]}
             </div>
-            <span className="text-xs font-medium text-gray-700 group-hover:text-indigo-700">
+            <span className="text-xs font-medium text-gray-700 group-hover:text-indigo-700 leading-tight">
               {preset.name}
             </span>
           </button>
